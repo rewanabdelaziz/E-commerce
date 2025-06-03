@@ -1,6 +1,40 @@
-# ECommerce
+# E-Commerce Angular Project
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.1.3.
+This is a full-featured e-commerce web application built with **Angular**.  
+It includes user features, admin dashboard, and authentication system.
+
+## 🌟 Features
+
+### 👤 User Side
+- View list of products
+- Filter by category
+- Add/remove items from cart
+- Adjust quantity in cart
+- View total price
+- Place orders
+
+### 🛠️ Admin Dashboard
+- Add, update, and delete products
+- Upload product image
+- Manage product categories
+- Modal-based form management
+- Responsive UI for large and small screens
+
+### 🔐 Authentication
+- Sign up & log in
+- Guarded routes for admin access
+- Basic session control with localStorage
+
+---
+
+## 🧪 Tech Stack
+- Angular 18
+- Bootstrap 5
+- TypeScript
+- Reactive Forms
+- Angular Router
+- JSON Server (for API simulation)
+
 
 ## Development server
 

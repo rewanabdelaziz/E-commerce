@@ -1,0 +1,12 @@
+.box{
+  height: 100vh;
+}
+@media (width < 575px) {
+  .boxImg{
+  height: 40%;
+  display: flex;
+  justify-content: center;
+  width: 50%;
+  }
+}
+

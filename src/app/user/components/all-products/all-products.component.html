@@ -1,0 +1,12 @@
+<div class="container my-3">
+  <app-select [SelectTitle]="'Categories'" [Allcategories]="Allcategories" (onChangeSelect)="filterProducts($event)"></app-select>
+
+  <div class="row my-5">
+    @for(product of Products ;track product.id;){
+      <div class="col-md-3 col-sm-12 m-3" >
+        <app-product-card [product]="product" (onAdd)="addToCart($event)"></app-product-card>
+      </div>
+    }
+  </div>
+
+</div>

@@ -1,0 +1,115 @@
+<div class="cartBox container mx-auto mt-5" >
+  <form [formGroup]="dateForm" (ngSubmit)="filter()">
+    <div class="row">
+      <div class="col-md-3 my-1">
+        <label for="startdate">Start Date:</label>
+        <input type="date" name="startdate" id="startdate" class="form-control" formControlName="start">
+      </div>
+      <div class="col-md-3 my-1">
+        <label for="enddate">End Date:</label>
+        <input type="date" name="enddate" id="enddate" class="form-control" formControlName="end">
+      </div>
+      <div class="col-md-2 d-flex align-items-end my-1">
+        <button type="submit" class="btn btn-success" [disabled]="dateForm.invalid">Apply</button>
+      </div>
+    </div>
+  </form>
+  <div class="table-responsive">
+    <table class="table table-striped">
+    <thead class="text-center">
+      <tr>
+        <th></th>
+        <th>Date</th>
+        <th>Quantity</th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody >
+      @for(item of carts;track item.id){
+        <tr>
+        <td></td>
+        <td>{{item.date |date:"mediumDate" }}</td>
+
+        <td>
+          {{item.products.length}}
+        </td>
+
+        <td>
+          <button class="btn btn-danger m-2" (click)="delete(item.id)">Delete</button>
+          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="viewDetails(item.id)">
+            Details
+          </button>
+        </td>
+      </tr>
+      }
+
+    </tbody>
+    </table>
+  </div>
+
+
+</div>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" style="max-width: 900px !important;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Cart Details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="table-responsive">
+          <table class="table table-striped">
+    <thead class="text-center">
+      <tr>
+        <th></th>
+        <th>Name</th>
+        <th>Price</th>
+        <th style="width: 25%;">Quantity</th>
+        <th>Total</th>
+      </tr>
+    </thead>
+    <tbody >
+      @for(prd of products;track prd.item.id){
+        <tr>
+        <td><img src="{{prd.item.image}}" alt=""></td>
+        <td>{{prd.item.title}}</td>
+
+        <td>
+          {{prd.item.price}} L.E
+        </td>
+        <td>
+          {{prd.quantity}}
+        </td>
+        <td>
+          {{prd.item.price * prd.quantity}} L.E
+        </td>
+
+
+      </tr>
+      }
+
+    </tbody>
+    <tfoot>
+      <tr>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th>Total:{{total}} L.E</th>
+      </tr>
+    </tfoot>
+        </table>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

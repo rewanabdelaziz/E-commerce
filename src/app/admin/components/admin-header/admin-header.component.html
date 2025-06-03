@@ -1,0 +1,28 @@
+<nav class="navbar navbar-expand-lg navbar-light sticky-top px-3">
+  <a class="navbar-brand text-light" routerLink="/" routerLinkActive="active" >MARKET's Admin</a>
+  <button class="navbar-toggler" type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarNav"
+        aria-controls="navbarNav"
+        aria-expanded="false"
+        aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse ms-auto" id="navbarNav">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link text-light" routerLink="/admin/products" routerLinkActive="active" >products</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link text-light" routerLink="/admin/cart" routerLinkActive="active" > your cart</a>
+      </li>
+      @if(islogged){
+        <li class="nav-item">
+          <button class="nav-link bg-warning rounded" (click)="logOut()" >logout</button>
+        </li>
+      }
+
+    </ul>
+  </div>
+</nav>
+

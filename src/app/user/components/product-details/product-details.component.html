@@ -1,0 +1,19 @@
+<div class="box d-flex justify-content-center align-items-center m-auto px-3">
+  <div class="row align-items-center">
+    <div class="col-md-3 col-sm-6 justify-content-center boxImg">
+      <img [src]="product.image" alt="" class="w-100 h-100">
+    </div>
+    <div class="col-md-7 col-sm-6 mt-4">
+      <div class="info">
+        <div class="list-unstyled ">
+          <li><strong>Title : </strong>{{product.title}}</li>
+          <li><strong>Category : </strong>{{product.category}}</li>
+          <li><strong>Description : </strong>{{product.description}}</li>
+          <li><strong>Rate : </strong>{{product.rating.rate}}</li>
+          <li><strong>count : </strong>{{product.rating.count}}</li>
+          <li><strong>Price : </strong>{{product.price}}</li>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

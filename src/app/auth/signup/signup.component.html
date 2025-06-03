@@ -1,0 +1,77 @@
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+  <div class="card p-4 shadow w-100" style="max-width: 500px;">
+    <h3 class="text-center mb-4">Sign Up</h3>
+    <form (ngSubmit)="onSignUp()" [formGroup]="signupForm">
+      <div class="mb-3">
+        <label for="userName" class="form-label">Username</label>
+        <input
+          type="text"
+          id="userName"
+          class="form-control"
+          name="userName"
+          required
+          formControlName="userName"
+          autocomplete="username"
+        />
+        @if(userName?.touched){
+          <div class="mt-2">
+            @if(userName?.errors?.['required']){
+              <small class="bg-danger text-light p-1">User Name is required</small>
+            }@else if ( userName?.errors?.['pattern']) {
+              <small class="bg-danger text-light p-1">Username must be 3–20 characters, letters and numbers only.</small>
+            }
+        </div>
+        }
+      </div>
+      <div class="mb-3">
+        <label for="email" class="form-label">Email</label>
+        <input
+          type="email"
+          id="email"
+          class="form-control"
+          name="email"
+          formControlName="email"
+          autocomplete="email"
+          required
+        />
+        @if(email?.touched){
+          <div class="mt-2">
+            @if(email?.errors?.['required']){
+              <small class="bg-danger text-light p-1">email is required</small>
+            }@else if ( email?.errors?.['pattern']) {
+              <small class="bg-danger text-light p-1">Please enter a valid email address.</small>
+            }
+        </div>
+        }
+      </div>
+      <div class="mb-3">
+        <label for="password" class="form-label">Password</label>
+        <input
+          type="password"
+          id="password"
+          class="form-control"
+          name="password"
+          required
+          formControlName="password"
+          autocomplete="current-password"
+        />
+        @if(password?.touched){
+          <div class="mt-2">
+            @if( password?.errors?.['required']){
+              <small class="bg-danger text-light p-1">password is required</small>
+            }@else if ( password?.errors?.['pattern']) {
+              <small class="bg-danger text-light p-1"> Password must be at least 8 characters.</small>
+            }
+          </div>
+        }
+      </div>
+
+      <!-- role hidden and set automatically -->
+      <input type="hidden" name="role"  formControlName="role" />
+
+      <button type="submit" class="btn btn-success w-100" [disabled]="signupForm.invalid">Sign Up</button>
+    </form>
+    <p class="text-center mt-3">Already have an account? <a routerLink="/auth/login">Login</a></p>
+  </div>
+</div>
+
