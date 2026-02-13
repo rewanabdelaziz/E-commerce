@@ -3,7 +3,7 @@ import { CartService } from '../../services/cart.service';
 import { DatePipe } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ProductsService } from '../../../user/services/products.service';
-import { IcartProduct } from '../../../core/interfaces/IcartProduct';
+import { IcartProduct } from '../../../core/models/IcartProduct';
 
 @Component({
   selector: 'app-admincart',

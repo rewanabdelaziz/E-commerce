@@ -1,7 +1,7 @@
-import { IcartProduct } from './../../../core/interfaces/IcartProduct';
+import { IcartProduct } from '../../../core/models/IcartProduct';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { IcartModel } from '../../../core/interfaces/IcartModel';
+import { IcartModel } from '../../../core/models/IcartModel';
 import { UserCartService } from '../../services/userCart.service';
 import { DecimalPipe, NgIf } from '@angular/common';
 import { AuthService } from '../../../auth/service/auth.service';
@@ -86,7 +86,7 @@ export class CartComponent implements OnInit {
       return {productId:prd.item.id, quantity: prd.quantity}
     })
     let model:IcartModel ={
-      userId: (user?.id)? user?.id : 1,
+      userId: (user?.uid)? user?.uid : 1,
       date: new Date(),
       products: mapProducts
     }

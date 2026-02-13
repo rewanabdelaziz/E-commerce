@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
-import { IcartModel } from '../../core/interfaces/IcartModel';
+import { IcartModel } from '../../core/models/IcartModel';
 
 @Injectable({
   providedIn: 'root'

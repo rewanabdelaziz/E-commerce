@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ProductsService } from '../../services/products.service';
-import { Iproduct } from '../../../core/interfaces/iproduct';
+import { Iproduct } from '../../../core/models/iproduct';
 import { Router, RouterLink } from '@angular/router';
 import { SelectComponent } from '../../../shared/components/select/select.component';
 import { ProductCardComponent } from '../../../shared/components/product-card/product-card.component';

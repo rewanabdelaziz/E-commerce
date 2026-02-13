@@ -1,4 +1,4 @@
-import { Iproduct } from './../../../core/interfaces/iproduct';
+import { Iproduct } from '../../../core/models/iproduct';
 import { SelectComponent } from './../../../shared/components/select/select.component';
 import { Component, OnInit } from '@angular/core';
 import { ProductsService } from '../../../user/services/products.service';

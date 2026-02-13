@@ -1,7 +1,7 @@
 import { NgIf, SlicePipe } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Iproduct } from '../../../core/interfaces/iproduct';
+import { Iproduct } from '../../../core/models/iproduct';
 import { RouterLink } from '@angular/router';
 
 @Component({

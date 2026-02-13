@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../service/auth.service';
-import { User } from '../../core/interfaces/user';
+import { UserProfile } from '../../core/models/user';
 import { Router, RouterLink } from '@angular/router';
 
 @Component({
@@ -37,7 +37,7 @@ export class SignupComponent {
 
 
   onSignUp(){
-    const newUser:User={
+    const newUser:UserProfile={
       userName:this.userName?.value,
       email:this.email?.value,
       password:this.password?.value,
