@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { SpinnerComponent } from '../../../shared/components/spinner/spinner.component';
-import { UserHeaderComponent } from '../user-header/user-header.component';
 import { HeaderComponent } from "../../../shared/components/header/header.component";
 
 @Component({
