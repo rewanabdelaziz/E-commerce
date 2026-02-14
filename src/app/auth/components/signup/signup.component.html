@@ -60,15 +60,18 @@
             @if( password?.errors?.['required']){
               <small class="bg-danger text-light p-1">password is required</small>
             }@else if ( password?.errors?.['pattern']) {
-              <small class="bg-danger text-light p-1"> Password must be at least 8 characters.</small>
+              <small class="bg-danger text-light p-1"> Password must be at least 8 characters, includes letters and numbers only.</small>
             }
           </div>
         }
       </div>
 
-      <!-- role hidden and set automatically -->
-      <input type="hidden" name="role"  formControlName="role" />
-
+      
+      @if(errorMessage()){
+        <div class="mb-3">
+          <small class="bg-danger text-light p-1">{{errorMessage()}}</small>
+        </div>
+      }
       <button type="submit" class="btn btn-success w-100" [disabled]="signupForm.invalid">Sign Up</button>
     </form>
     <p class="text-center mt-3">Already have an account? <a routerLink="/auth/login">Login</a></p>

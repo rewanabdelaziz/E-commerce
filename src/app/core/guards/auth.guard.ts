@@ -1,28 +1,50 @@
+import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { AuthService } from '../../auth/service/auth.service';
-import { inject } from '@angular/core';
+import { Auth, authState } from '@angular/fire/auth';
+import { map, take, switchMap } from 'rxjs';
+import { of } from 'rxjs';
 
 export const authGuard: CanActivateFn = (route, state) => {
-  const _authService = inject(AuthService)
-  const _router = inject(Router)
-  const islogged :boolean =_authService.isLoggedIn()
-  const user = _authService.getCurrentUser();
-  const currentPath = state?.url;
+  const _auth = inject(Auth);
+  const _authService = inject(AuthService);
+  const _router = inject(Router);
+  const currentPath = state.url;
 
-  if(!islogged){
-    _router.navigateByUrl('/auth/login')
-    return false;
-  }else if (currentPath?.startsWith('admin') && user?.role !== 'admin') {
-    _router.navigateByUrl('/user');
-    return false;
-  }else if (currentPath?.startsWith('user') && user?.role !== 'user') {
-    _router.navigateByUrl('/admin');
-    return false;
-  }else{
-    return true;
-  }
+ 
+  return authState(_auth).pipe(
+    take(1),
+    switchMap(user => {
+      const isLoggedIn = !!user;
+      const role = _authService.userRole();
+      
+      // if not logged in
+      if (!isLoggedIn) {
+        if (currentPath.includes('auth')) return of(true);
+        _router.navigateByUrl('/auth/login');
+        return of(false);
+      }
 
+      // if logged in and try to reach auth
+      if (currentPath.includes('auth')) {
+        _router.navigateByUrl(role === 'admin' ? '/admin' : '/user');
+        return of(false);
+      }
 
+     
+      // guard admin dashboared
+      if (currentPath.startsWith('/admin') && role !== 'admin') {
+        _router.navigateByUrl('/user');
+        return of(false);
+      }
 
+     // guard user
+      if (currentPath.startsWith('/user') && role !== 'user') {
+        _router.navigateByUrl('/admin');
+        return of(false);
+      }
 
+      return of(true);
+    })
+  );
 };

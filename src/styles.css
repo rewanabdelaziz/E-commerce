@@ -1,7 +1,50 @@
-body{
-  padding:0;
-  margin:0 !important;
+:root {
+  /* EliteCommerce Color Palette */
+  --main-purple: #6C63FF;
+  --dark-bg: #0F172A;
+  --card-bg: rgba(30, 41, 59, 0.7);
+  --text-light: #F1F5F9;
+  --text-muted: #94A3B8;
+  --glass-border: rgba(148, 163, 184, 0.1);
 }
-*{
-  font-family: cursive;
+
+body {
+  background-color: var(--dark-bg);
+  color: var(--text-light);
+  font-family: 'Inter', sans-serif;
+}
+
+.glass-card {
+  background: var(--card-bg);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border);
+  border-radius: 15px;
+}
+.bg-purple {
+  background-color: var(--main-purple) !important;
+}
+
+.text-purple {
+  color: var(--main-purple) !important;
+}
+
+.btn-purple-outline {
+  border: 1px solid var(--main-purple);
+  color: var(--main-purple);
+  transition: all 0.3s ease;
+}
+
+.btn-purple-outline:hover {
+  background-color: var(--main-purple);
+  color: white;
+  transform: translateY(-2px);
+}
+
+.transition-hover {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.transition-hover:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 10px 20px rgba(108, 99, 255, 0.2) !important;
 }

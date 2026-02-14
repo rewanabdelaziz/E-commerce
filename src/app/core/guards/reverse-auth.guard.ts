@@ -7,8 +7,8 @@ export const reverseAuthGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
 
   if (auth.isLoggedIn()) {
-    const user = auth.getCurrentUser();
-    if (user?.role === 'admin') {
+
+    if (auth.userRole() === 'admin') {
       router.navigateByUrl('/admin');
     } else {
       router.navigateByUrl('/user');

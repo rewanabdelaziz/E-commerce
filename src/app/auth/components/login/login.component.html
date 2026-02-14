@@ -46,9 +46,10 @@
           </div>
         }
       </div>
-      @if(msgError){
+      
+      @if(!!msgError()){
         <div class="mb-3">
-          <small class="bg-danger text-light p-1">{{msgError}}</small>
+          <small class="bg-danger text-light p-1">{{msgError()}}</small>
         </div>
       }
       <button type="submit" class="btn btn-primary w-100" [disabled]="logInForm.invalid">Login</button>

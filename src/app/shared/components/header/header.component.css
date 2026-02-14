@@ -1,0 +1,27 @@
+.nav-link{
+    color: var(--text-light) !important;
+}
+.brand svg{
+    background-color: var(--main-purple) !important;
+    margin-right: 10px;
+}
+.navbar-brand{
+    font-weight: 600;
+}
+nav{
+    position: sticky;
+    top: 0;
+    padding: 15px;
+    border-bottom: 1px solid var(--glass-border);
+    background-color: var(--dark-bg);
+}
+.active{
+    color: var(--main-purple) !important;
+    border-bottom: 3px solid var(--main-purple);
+}
+.nav-link:hover ,.log:hover{
+    background-color: rgba(255, 255, 255, 0.1); 
+    backdrop-filter: blur(5px);
+    border-radius: 15px;
+}
+

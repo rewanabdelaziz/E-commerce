@@ -81,7 +81,7 @@ export class CartComponent implements OnInit {
   }
 
   addCart(){
-    let user = this._auth.getCurrentUser()
+    let user = this._auth.currentUser()
     let mapProducts=this.cartProducts.map((prd)=>{
       return {productId:prd.item.id, quantity: prd.quantity}
     })

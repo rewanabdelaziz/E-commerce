@@ -1,5 +1,6 @@
+// old
 export interface IcartModel {
-  userId:number,
+  userId:string | number,
   date: Date,
   products: {
     productId:number,

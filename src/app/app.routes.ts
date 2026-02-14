@@ -1,17 +1,8 @@
 import { Routes } from '@angular/router';
 import { PageNotFoundComponent } from './shared/components/pageNotFound/pageNotFound.component';
 import { authGuard } from './core/guards/auth.guard';
-import { homeRedirectGuard } from './core/guards/home-redirect.guard';
-import { EmptyComponent } from './shared/components/empty/empty.component';
-import { reverseAuthGuard } from './core/guards/reverse-auth.guard';
 
 export const routes: Routes = [
-  {
-    path:'',
-    pathMatch:'full',
-    component:EmptyComponent,
-    canActivate:[homeRedirectGuard]
-  },
   {
     path: 'admin',
     loadChildren: () =>
@@ -22,7 +13,7 @@ export const routes: Routes = [
     path: 'auth',
     loadChildren: () =>
       import('./auth/auth.routes').then((m) => m.authRoutes),
-    canActivate:[reverseAuthGuard]
+    canActivate:[authGuard]
   },
   {
     path: 'user',

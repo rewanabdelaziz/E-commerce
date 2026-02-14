@@ -3,5 +3,6 @@ export interface UserProfile {
   userName:string,
   email:string,
   password:string,
-  role: 'admin' | 'user'
+  role?: UserRole
 }
+export type UserRole = 'guest' | 'user' | 'admin';

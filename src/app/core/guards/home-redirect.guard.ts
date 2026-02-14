@@ -11,9 +11,7 @@ export const homeRedirectGuard: CanActivateFn = (route, state) => {
     return false;
   }
 
-  const user = _auth.getCurrentUser();
-
-  if (user?.role === 'admin') {
+  if (_auth.userRole() === 'admin') {
     _router.navigateByUrl('/admin');
   } else {
     _router.navigateByUrl('/user');

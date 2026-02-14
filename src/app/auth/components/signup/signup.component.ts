@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { AuthService } from '../service/auth.service';
-import { UserProfile } from '../../core/models/user';
+import { AuthService } from '../../service/auth.service';
+import { UserProfile } from '../../../core/models/user';
 import { Router, RouterLink } from '@angular/router';
 
 @Component({
@@ -13,13 +13,14 @@ import { Router, RouterLink } from '@angular/router';
 })
 export class SignupComponent {
   signupForm:FormGroup
+  errorMessage = signal<string | null>(null);
+  isLoading = signal<boolean>(false);
 
   constructor(private _auth:AuthService, private _route:Router){
     this.signupForm=new FormGroup({
-      userName: new FormControl('',[Validators.required,Validators.pattern(/^[a-zA-Z0-9]{3,20}$/)]),
+      userName: new FormControl('',[Validators.required,Validators.pattern(/^[a-zA-Z0-9 ]{3,20}$/)]),
       email: new FormControl('',[Validators.required,Validators.email,Validators.pattern(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/)]),
-      password: new FormControl('',[Validators.required,Validators.pattern(/^(?=.*\d).{8,}$/)]),
-      role: new FormControl('user')
+      password: new FormControl('',[Validators.required,Validators.pattern(/^(?=.*[a-zA-Z])(?=.*\d).{8,}$/)]),
     })
   }
 
@@ -36,22 +37,29 @@ export class SignupComponent {
   }
 
 
-  onSignUp(){
+  async onSignUp(){
+    if (this.signupForm.invalid) {
+      this.signupForm.markAllAsTouched();  
+      return;
+    }
+
+    this.isLoading.set(true);
+    this.errorMessage.set(null);
+
     const newUser:UserProfile={
-      userName:this.userName?.value,
+      userName:this.userName?.value.trim(),
       email:this.email?.value,
       password:this.password?.value,
-      role:'user'
     }
-    this._auth.addNewUser(newUser).subscribe({
-    next: () => {
-      this._route.navigateByUrl('/auth/login')
-      // console.log('User signed up successfully');
-    },
-    error: (err) => {
-      console.error('Signup failed:', err);
+
+    try {
+      await this._auth.addNewUser(newUser)
+    } catch (error:any) {
+      this.errorMessage.set(error)
+    } finally{
+      this.isLoading.set(false)
     }
-  });
+    
     // console.log(newUser)
   }
 }
