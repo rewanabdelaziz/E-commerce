@@ -1,6 +1,9 @@
-<div class=" d-flex justify-content-center">
-  <div class="lds-grid" *ngIf="isLoading$ | async">
-    <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+@if (loadingService.isLoading()) {
+  <div class="loading-overlay">
+    <div class="spinner-container">
+      <div class="custom-spinner"></div>
+      <div class="loading-text">ELITE<span>COMMERCE</span></div>
+    </div>
   </div>
-</div>
+}
 

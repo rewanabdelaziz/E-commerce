@@ -1,20 +1,17 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { Injectable, signal } from '@angular/core';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class SpinnerService {
-
-  constructor() { }
-  private loading = new BehaviorSubject<boolean>(false);
-  loading$ = this.loading.asObservable();
+   isLoading = signal<boolean>(false)
 
   show() {
-    this.loading.next(true);
+    this.isLoading.set(true);
   }
 
   hide() {
-    this.loading.next(false);
+    this.isLoading.set(false);
   }
 }
