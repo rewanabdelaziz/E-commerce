@@ -3,6 +3,7 @@ import { PageNotFoundComponent } from './shared/components/pageNotFound/pageNotF
 import { authGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
+  {path: '', redirectTo: 'auth', pathMatch:'full'},
   {
     path: 'admin',
     loadChildren: () =>
