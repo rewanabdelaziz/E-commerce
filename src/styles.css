@@ -1,7 +1,6 @@
 :root {
-  /* EliteCommerce Color Palette */
   --main-purple: #6C63FF;
-  --dark-bg: #0F172A;
+  --dark-bg: rgb(15, 23, 42);
   --card-bg: rgba(30, 41, 59, 0.7);
   --text-light: #F1F5F9;
   --text-muted: #94A3B8;

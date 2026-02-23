@@ -2,9 +2,6 @@ import { Component, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../service/auth.service';
 import { Router, RouterLink } from '@angular/router';
-import { HeaderComponent } from "../../../shared/components/header/header.component";
-
-
 
 @Component({
   selector: 'app-login',

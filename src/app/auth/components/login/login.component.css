@@ -1,0 +1,45 @@
+.row,.icon-box{
+    width: fit-content;
+}
+.input-group-text{
+    background-color: var(--secondary-color);
+    color: var(--primary-color);
+}
+p,span i{
+    color: var(--text-muted);
+}
+.card,input,span, input:hover, input:focus{
+    background-color: var(--card-bg);
+    border: var(--glass-border) 1px solid;
+    border-radius: 10px;
+}
+input{
+    color: var(--text-light);   
+}
+input::placeholder {
+  color: var(--text-muted);
+}
+.small{
+    font-size: smaller;
+}
+.btn{
+    background-color: var(--main-purple) !important;
+    color: white;
+    transition: all 0.3s ease;
+    border: var(--glass-border) 1px solid;
+    border-radius: 10px;
+}
+a{
+    color: var(--main-purple);
+    text-decoration: none;
+}
+@media (max-width:576px) {
+    .form-box{
+        width: 100% ;
+        padding: 20px !important;
+    }
+    .login-form{
+        width: 90% !important;
+    }
+
+}
