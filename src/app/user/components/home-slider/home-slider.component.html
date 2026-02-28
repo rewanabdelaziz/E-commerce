@@ -1,0 +1,57 @@
+<div class="home-wrapper">
+
+  <section class="content-section">
+    <div class="section-title">
+      <span class="line"></span>
+      <h2>Shop By <span>Category</span></h2>
+      <p>Browse our unique collections tailored just for you.</p>
+    </div>
+
+    <div class="slider">
+      <div class="slide-track">
+        @for(cat of Allcategories; track cat.id){
+          <div class="slide category-card" >
+            <div class="glass-overlay">
+                <h3>{{cat.name}}</h3>
+                <span>Explore Collection</span>
+            </div>
+            <img [src]="cat.image" [alt]="cat.name">
+          </div>
+        }
+        @for(cat of Allcategories; track 'clone-cat-' + cat.id){
+          <div class="slide category-card">
+            <div class="glass-overlay">
+                <h3>{{cat.name}}</h3>
+                <span>Explore Collection</span>
+            </div>
+            <img [src]="cat.image" [alt]="cat.name">
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="content-section mt-5">
+    <div class="section-title">
+      <span class="line"></span>
+      <h2>Featured <span>Products</span></h2>
+      <p>Our top picks and best sellers this week.</p>
+    </div>
+
+    <div class="slider">
+      <div class="slide-track">
+        @for(product of products ; track product.id){
+          <div class="slide" [style.--bg-img]="'url(' + product.image + ')'" (click)="showDetails(product.id)">
+            <img [src]="product.image" [alt]="product.title">
+          </div>
+        }
+        @for(product of products ; track 'clone-' + product.id){
+          <div class="slide" [style.--bg-img]="'url(' + product.image + ')'" (click)="showDetails(product.id)">
+            <img [src]="product.image" [alt]="product.title">
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+
+</div>

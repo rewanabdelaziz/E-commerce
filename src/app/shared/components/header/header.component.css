@@ -11,9 +11,10 @@
 nav{
     position: sticky;
     top: 0;
+    z-index: 1000;
     padding: 15px;
     border-bottom: 1px solid var(--glass-border);
-    background-color: var(--dark-bg);
+    background-color: var(--dark-bg) !important;
 }
 .active{
     color: var(--main-purple) !important;

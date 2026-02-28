@@ -1,8 +1,7 @@
-import { routes } from './../../../app.routes';
 import { Component, OnInit } from '@angular/core';
 import { ProductsService } from '../../services/products.service';
 import { Iproduct } from '../../../core/models/iproduct';
-import { ActivatedRoute, Route, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-product-details',
@@ -12,20 +11,20 @@ import { ActivatedRoute, Route, Router } from '@angular/router';
   styleUrls: ['./product-details.component.css']
 })
 export class ProductDetailsComponent implements OnInit {
-  currentId!:number;
+  currentId!:string;
   product:Iproduct= {} as Iproduct;
 
   constructor(private _products:ProductsService,private _router:Router,private _activatedRoute: ActivatedRoute) { }
 
   ngOnInit() {
     this._activatedRoute.paramMap.subscribe((paramMap)=>{
-      this.currentId=Number(paramMap.get('id'))
+      this.currentId=paramMap.get('id') || ''
       this.getProductbyid(this.currentId)
     })
   }
 
 
-  getProductbyid(id:number){
+  getProductbyid(id:string){
   this._products.getProductsById(id).subscribe({
     next: (res) =>{
       this.product=res

@@ -16,7 +16,7 @@ export class AllProductsComponent implements OnInit {
 
   Products:Iproduct[]=[] as Iproduct[]
   cart:{item:Iproduct,quantity:number}[]=[]
-  Allcategories=[]
+  Allcategories: string[] = [];
   category:string='all';
 
 

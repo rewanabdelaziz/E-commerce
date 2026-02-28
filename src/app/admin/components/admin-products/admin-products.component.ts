@@ -15,7 +15,7 @@ import { AdminProductsService } from '../../services/admin-products.service';
 })
 export class AdminProductsComponent implements OnInit{
   products:Iproduct[] = [] as Iproduct[];
-  Allcategories=[];
+  Allcategories: string[] = [];
   msg="";
   base64:any=[];
   currentProduct:Iproduct = {} as Iproduct
@@ -50,7 +50,7 @@ export class AdminProductsComponent implements OnInit{
   getAllcats(){
     this._productService.getAllCategories().subscribe({
     next: (res) =>{
-      this.Allcategories=res
+      this.Allcategories=res || []
     },
     error: (err) =>{
       console.log(err)

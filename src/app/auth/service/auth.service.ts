@@ -36,6 +36,7 @@ export class AuthService {
     })
   }
   
+  
   // signUp
   async addNewUser(user:UserProfile){
     try {

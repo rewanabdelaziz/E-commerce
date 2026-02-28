@@ -11,12 +11,12 @@ import { Component, EventEmitter, Input, Output} from '@angular/core';
 export class SelectComponent {
 @Input() SelectTitle:string ='';
 @Input() SelectValue:string ='';
-@Input() Allcategories=[];
+@Input() Allcategories:string[]=[];
 @Input() All:boolean=true;
 
 @Output() onChangeSelect:EventEmitter<string>
   constructor(){
-    this.onChangeSelect=new EventEmitter<string>
+    this.onChangeSelect=new EventEmitter<string>()
   }
   changeSelect(event:any){
     this.onChangeSelect.emit(event)
