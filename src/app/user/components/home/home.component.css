@@ -8,7 +8,7 @@
     align-items: center;
 }
 
-/* النص الرئيسي */
+
 .hero-text h1 {
     font-size: 3.5rem;
     font-weight: 800;
@@ -19,8 +19,7 @@
 
 .text-gradient {
     background: linear-gradient(45deg, var(--main-purple), #a855f7);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+
 }
 
 .hero-text p {
@@ -30,7 +29,7 @@
     max-width: 500px;
 }
 
-/* زراير Elite */
+
 .btn-primary-elite {
     background: var(--main-purple);
     color: white;
@@ -56,7 +55,7 @@
     transition: 0.3s;
 }
 
-/* الكارت الزجاجي بجانب النص */
+
 .glass-card-hero {
     background: rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(15px);
@@ -73,7 +72,7 @@
     box-shadow: 0 20px 40px rgba(0,0,0,0.4);
 }
 
-/* الدوائر الملونة في الخلفية */
+
 .blob {
     position: absolute;
     width: 300px;
