@@ -19,7 +19,7 @@
     <tbody>
       @for(product of cartProducts;track product.item.id){
         <tr>
-        <td><img [src]="product.item.image" alt=""></td>
+        <td><img [src]="product.item.images[0]" alt=""></td>
         <td>{{product.item.title}}</td>
         <td>{{product.item.price | number:'1.0-2'}} L.E</td>
         <td>

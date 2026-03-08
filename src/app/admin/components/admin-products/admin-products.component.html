@@ -19,7 +19,7 @@
     <tbody>
       @for(product of products;track product.id){
         <tr>
-        <td><img [src]="product.image" alt="product's image" style="width: 80px; height: auto;" class="img-fluid"></td>
+        <td><img [src]="product.images[0]" alt="product's image" style="width: 80px; height: auto;" class="img-fluid"></td>
         <td>{{product.title | slice: 0:50}}</td>
         <td>{{product.category}}</td>
         <td>{{product.price}} L.E</td>
@@ -52,9 +52,9 @@
               <label for="price">Price</label>
               <input type="text" formControlName="price" id="price" class="form-control">
             </div>
-            <div class="col-md-4 col-sm-12">
+            <!-- <div class="col-md-4 col-sm-12">
               <app-select [SelectTitle]="'Categories'" [Allcategories]="Allcategories" [All]="false" (onChangeSelect)="getSelectedCategory($event)"></app-select>
-            </div>
+            </div> -->
             <div class="col-md-4 col-sm-12">
               <label for="image">Image</label>
               <img src="{{base64}}" alt="" width="200" height="200" class="img-fluid">
@@ -94,9 +94,9 @@
               <label for="price">Price</label>
               <input type="text" formControlName="price" id="price" class="form-control">
             </div>
-            <div class="col-md-4 col-sm-12">
+            <!-- <div class="col-md-4 col-sm-12">
               <app-select [SelectTitle]="'Categories'" [Allcategories]="Allcategories" [All]="false" [SelectValue]="ProductForm.value.category" (onChangeSelect)="getSelectedCategory($event)"></app-select>
-            </div>
+            </div> -->
             <div class="col-md-4 col-sm-12">
               <label for="image">Image</label>
               <img src="{{base64}}" alt="" width="200" height="200" class="img-fluid">

@@ -1,19 +1,110 @@
-<div class="box d-flex justify-content-center align-items-center m-auto px-3">
-  <div class="row align-items-center">
-    <div class="col-md-3 col-sm-6 justify-content-center boxImg">
-      <img [src]="product.image" alt="" class="w-100 h-100">
-    </div>
-    <div class="col-md-7 col-sm-6 mt-4">
-      <div class="info">
-        <div class="list-unstyled ">
-          <li><strong>Title : </strong>{{product.title}}</li>
-          <li><strong>Category : </strong>{{product.category}}</li>
-          <li><strong>Description : </strong>{{product.description}}</li>
-          <li><strong>Rate : </strong>{{product.rating.rate}}</li>
-          <li><strong>count : </strong>{{product.rating.count}}</li>
-          <li><strong>Price : </strong>{{product.price}}</li>
+@if(product() && currentImage){
+<div class="product-details-page p-4 p-lg-5">
+  
+  <nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a routerLink="/user/home">Home</a></li>
+      <li class="breadcrumb-item"><a routerLink="/user/products">Shop</a></li>
+      <li class="breadcrumb-item active text-white" aria-current="page">{{ product()?.title }}</li>
+    </ol>
+  </nav>
+
+  <div class="row g-5">
+    
+    <div class="col-lg-6">
+      <div class="main-image-container mb-3">
+        <img [src]="currentImage" alt="Main Product Image" class="img-fluid rounded-20 main-prd-img w-100">
+      </div>
+      
+      <div class="d-flex gap-3 thumbnail-gallery">
+        @for(img of product()?.images; track img; let i = $index){
+         <div class="thumb-img" (click)="selectimg(img)" [ngClass]="{'active': currentImage === img}">
+           <img [src]="img" [alt]="'Thumb ' + i">
+         </div>
+        }
+        
+      </div>
+
+    
+  </div>
+  <div class="col-lg-6 product-info-col p-lg-4">
+      <span class="badge-cat mb-2">{{ product()?.category?.name }}</span>
+      <h1 class="prd-title text-white fw-bold mb-3">{{ product()?.title }}</h1>
+      
+      <!-- <div class="d-flex align-items-center gap-2 mb-4">
+        <div class="stars text-warning fs-5">
+          <i class="fas fa-star"></i> <i class="fas fa-star"></i> <i class="fas fa-star"></i> <i class="fas fa-star"></i> <i class="far fa-star text-secondary"></i>
+        </div>
+        <span class="rating-text text-secondary">4.0 (256 reviews)</span>
+      </div> -->
+
+      <div class="d-flex align-items-end gap-3 mb-4 p-3 rounded-15 price-box-glass">
+        <span class="current-price text-white fw-bold fs-1">${{ product()?.price | number:'1.2-2' }}</span>
+        <!-- <span class="old-price text-secondary text-decoration-line-through fs-5">$399.99</span> -->
+        <!-- <span class="badge-discount-elite">-25%</span> -->
+      </div>
+
+      <p class="prd-desc text-secondary mb-4">
+       {{ product()?.description }}
+      </p>
+
+      <!-- <div class="mb-4">
+        <h6 class="text-white mb-2">Color</h6>
+        <div class="d-flex gap-2">
+          <button class="btn-option active">Black</button>
+          <button class="btn-option">Silver</button>
+          <button class="btn-option">Rose Gold</button>
+        </div>
+      </div> -->
+
+      <div class="mb-4 d-flex align-items-center gap-3">
+        <div class="quantity-selector input-group rounded-10 overflow-hidden">
+          <button class="btn-qty" (click)="minusquantity()" [disabled]="quantity === 1"><i class="fas fa-minus"></i></button>
+          <input type="number" class="form-control qty-input text-center" [value]="quantity" min="1">
+          <button class="btn-qty" (click)="plusquantity()"><i class="fas fa-plus"></i></button>
+        </div>
+        <!-- <span class="stock-status text-success"><i class="fas fa-check-circle me-1"></i> In Stock</span> -->
+      </div>
+
+      <div class="d-flex gap-3 align-items-center mb-5">
+        <button class="btn-add-to-cart flex-grow-1" (click)="addToCart()"><i class="fas fa-shopping-cart me-2"></i> Add to Cart</button>
+        <button class="btn-action-glass"><i class="far fa-heart"></i></button>
+        <button class="btn-action-glass"><i class="fas fa-share-alt"></i></button>
+      </div>
+
+      <div class="row g-3 feature-info-row">
+        <div class="col-md-4">
+          <div class="feature-info-card text-center p-3 rounded-15 glass-effect">
+            <i class="fas fa-truck text-purple mb-2 fs-3"></i>
+            <h6 class="text-white mb-1">Free Shipping</h6>
+            <span class="small text-secondary">On orders over $50</span>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="feature-info-card text-center p-3 rounded-15 glass-effect">
+            <i class="fas fa-shield-alt text-purple mb-2 fs-3"></i>
+            <h6 class="text-white mb-1">Secure Payment</h6>
+            <span class="small text-secondary">100% protected</span>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="feature-info-card text-center p-3 rounded-15 glass-effect">
+            <i class="fas fa-undo text-purple mb-2 fs-3"></i>
+            <h6 class="text-white mb-1">30-Day Returns</h6>
+            <span class="small text-secondary">Easy returns</span>
+          </div>
         </div>
       </div>
+
     </div>
-  </div>
+
+
+
 </div>
+</div>
+}
+
+
+
+
+

@@ -1,24 +1,26 @@
-import { Iproduct } from '../../../core/models/iproduct';
+// import { Iproduct } from '../../../core/models/iproduct';
 import { SelectComponent } from './../../../shared/components/select/select.component';
 import { Component, OnInit } from '@angular/core';
 import { ProductsService } from '../../../user/services/products.service';
 import { NgIf, SlicePipe } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AdminProductsService } from '../../services/admin-products.service';
+import { Category } from '../../../core/models/category';
+import { Product } from '../../../core/models/product';
 
 @Component({
   selector: 'app-admin-products',
   standalone: true,
-  imports: [SlicePipe,SelectComponent,ReactiveFormsModule,NgIf],
+  imports: [SlicePipe,ReactiveFormsModule,NgIf],
   templateUrl: './admin-products.component.html',
   styleUrl: './admin-products.component.css'
 })
 export class AdminProductsComponent implements OnInit{
-  products:Iproduct[] = [] as Iproduct[];
-  Allcategories: string[] = [];
+  products:Product[] = [] as Product[];
+  Allcategories: Category[] = [];
   msg="";
   base64:any=[];
-  currentProduct:Iproduct = {} as Iproduct
+  currentProduct:Product = {} as Product
   ProductForm!:FormGroup;
 
   constructor(private _productService : ProductsService,private _fb:FormBuilder, private _AdminProductsService: AdminProductsService){
@@ -50,7 +52,7 @@ export class AdminProductsComponent implements OnInit{
   getAllcats(){
     this._productService.getAllCategories().subscribe({
     next: (res) =>{
-      this.Allcategories=res || []
+      this.Allcategories = (res as Category[]) || []
     },
     error: (err) =>{
       console.log(err)
@@ -72,31 +74,31 @@ export class AdminProductsComponent implements OnInit{
     }
   }
   AddProduct(){
-    let product:Iproduct=this.ProductForm.value
-    this._AdminProductsService.AddNewProduct(product).subscribe({
-      next: ()=>{
-        this.products.push(product)
-        this.msg="Product Added successfully";
-        setTimeout(()=>{
-        this.msg=''
-        },1500)
-      },
-      error:(err)=>{
-        console.log(err)
-      }
-    })
+    let product:Product=this.ProductForm.value
+    // this._AdminProductsService.AddNewProduct(product).subscribe({
+    //   next: ()=>{
+    //     this.products.push(product)
+    //     this.msg="Product Added successfully";
+    //     setTimeout(()=>{
+    //     this.msg=''
+    //     },1500)
+    //   },
+    //   error:(err)=>{
+    //     console.log(err)
+    //   }
+    // })
     // console.log(this.AddProductForm.value)
   }
 
-  update(product:Iproduct){
+  update(product:Product){
     this.ProductForm.patchValue({
       title: product.title,
       price: product.price,
       description: product.description,
-      image: product.image,
+      image: product.images[0],
       category: product.category,
     })
-    this.base64=product.image
+    this.base64=product.images[0]
     this.currentProduct=product
 
   }

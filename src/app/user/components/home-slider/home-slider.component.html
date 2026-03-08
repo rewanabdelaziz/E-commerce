@@ -9,8 +9,8 @@
 
     <div class="slider">
       <div class="slide-track">
-        @for(cat of Allcategories; track cat.id){
-          <div class="slide category-card" >
+        @for(cat of productsService.categories(); track cat.id){
+          <div class="slide category-card" (click)="showCategoryProducts(cat.id)">
             <div class="glass-overlay">
                 <h3>{{cat.name}}</h3>
                 <span>Explore Collection</span>
@@ -18,8 +18,8 @@
             <img [src]="cat.image" [alt]="cat.name">
           </div>
         }
-        @for(cat of Allcategories; track 'clone-cat-' + cat.id){
-          <div class="slide category-card">
+        @for(cat of productsService.categories(); track 'clone-cat-' + cat.id){
+          <div class="slide category-card" (click)="showCategoryProducts(cat.id)">
             <div class="glass-overlay">
                 <h3>{{cat.name}}</h3>
                 <span>Explore Collection</span>
@@ -40,15 +40,27 @@
 
     <div class="slider">
       <div class="slide-track">
-        @for(product of products ; track product.id){
-          <div class="slide" [style.--bg-img]="'url(' + product.image + ')'" (click)="showDetails(product.id)">
-            <img [src]="product.image" [alt]="product.title">
+        @for(product of productsService.products() ; track product.id){
+          @if(product.images && product.images.length > 0){
+            <div class="slide product-card" (click)="showDetails(product.id)">
+            <div class="glass-overlay">
+                <h3>{{product.title}}</h3>
+                <span>${{product.slug}}</span>
+            </div>
+             <img [src]="product.images[0]? product.images[0] : ''" [alt]="product.title">
           </div>
         }
-        @for(product of products ; track 'clone-' + product.id){
-          <div class="slide" [style.--bg-img]="'url(' + product.image + ')'" (click)="showDetails(product.id)">
-            <img [src]="product.image" [alt]="product.title">
+        }
+        @for(product of  productsService.products() ; track 'clone-' + product.id){
+          @if(product.images && product.images.length > 0){
+           <div class="slide product-card" (click)="showDetails(product.id)">
+            <div class="glass-overlay">
+                <h3>{{product.title}}</h3>
+                <span>${{product.slug}}</span>
+            </div>
+             <img [src]="product.images[0]? product.images[0] : ''" [alt]="product.title">
           </div>
+        }
         }
       </div>
     </div>

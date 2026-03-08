@@ -1,0 +1,108 @@
+.about-page {
+    background-color: #0f172a;
+    color: #94a3b8;
+    padding-top: 50px;
+}
+
+/* Hero Icon */
+.about-logo-icon {
+    width: 80px;
+    height: 80px;
+    background: var(--main-purple);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    font-size: 2rem;
+    color: white;
+    box-shadow: 0 0 30px rgba(108, 99, 255, 0.4);
+}
+
+/* Feature Cards */
+.feature-card {
+    background: rgba(30, 41, 59, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    padding: 40px 30px;
+    text-align: center;
+    transition: 0.3s;
+}
+
+.feature-card:hover {
+    background: rgba(30, 41, 59, 0.8);
+    border-color: var(--main-purple);
+    transform: translateY(-5px);
+}
+
+.feature-icon {
+    width: 60px;
+    height: 60px;
+    background: rgba(108, 99, 255, 0.1);
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    color: var(--main-purple);
+    font-size: 1.5rem;
+}
+
+.feature-card h4 {
+    color: white;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+/* Statistics Section */
+.stats-glass-card {
+    background: rgba(30, 41, 59, 0.5);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 30px;
+    padding: 50px 20px;
+}
+
+.stats-glass-card h3 {
+    color: white;
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 5px;
+}
+
+.stats-glass-card span {
+    color: #64748b;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.border-start-glass {
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Our Promise List */
+.promise-item {
+    background: rgba(30, 41, 59, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 15px;
+    padding: 20px 30px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    text-align: left;
+}
+
+.promise-item i {
+    font-size: 1.3rem;
+    color: var(--main-purple);
+}
+
+.promise-item span {
+    color: white;
+    font-weight: 500;
+}
+
+@media (max-width: 768px) {
+    .border-start-glass { border: none; margin-top: 20px; }
+}

@@ -1,7 +1,8 @@
 // old
 import { Iproduct } from "./iproduct";
+import { Product } from "./product";
 
 export interface IcartProduct {
-  item:Iproduct
+  item:Product
   quantity:number
 }

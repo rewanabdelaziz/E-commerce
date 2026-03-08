@@ -44,11 +44,11 @@
   width: max-content;
   animation: scroll 40s linear infinite;
 }
-.category-card {
+.category-card, .product-card {
   position: relative;
   cursor: pointer;
 }
-.category-card img{
+.category-card img, .product-card img{
     object-fit: cover !important;
 }
 .glass-overlay {
@@ -68,7 +68,7 @@
   pointer-events: none;
   transition: 0.4s;
 }
-.category-card:hover .glass-overlay {
+.category-card:hover .glass-overlay, .product-card:hover .glass-overlay {
   background: var(--main-purple); 
   border-color: white;
   transform: translate(-50%, -55%); 

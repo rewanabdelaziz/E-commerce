@@ -5,6 +5,10 @@
   --text-light: #F1F5F9;
   --text-muted: #94A3B8;
   --glass-border: rgba(148, 163, 184, 0.1);
+  --glass-card: rgba(30, 41, 59, 0.5);
+  --btn-hover:#5a52e0;
+  --text-primary: #ffffff;
+  --success-green: #22c55e;
 }
 
 body {

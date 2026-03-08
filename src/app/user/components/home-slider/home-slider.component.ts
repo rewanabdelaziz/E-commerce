@@ -1,14 +1,10 @@
-import { Component, OnInit, inject } from '@angular/core';
-import { Iproduct } from '../../../core/models/iproduct';
+import { Component, inject, signal } from '@angular/core';
 import { ProductsService } from '../../services/products.service';
-import { Router, RouterLink } from '@angular/router';
-export interface Category {
-  id: number;
-  name: string;
-  slug: string;
-  image: string;
-  icon: string;
-}
+import { Router } from '@angular/router';
+import { Product } from '../../../core/models/product';
+import { Category } from '../../../core/models/category';
+
+
 @Component({
   selector: 'app-home-slider',
   standalone: true,
@@ -16,44 +12,18 @@ export interface Category {
   templateUrl: './home-slider.component.html',
   styleUrl: './home-slider.component.css'
 })
-export class HomeSliderComponent implements OnInit {
-  private productsService = inject(ProductsService);
+export class HomeSliderComponent  {
+  productsService = inject(ProductsService);
   private _router = inject(Router);
-  Allcategories: Category[] = [];
-  products: Iproduct[] = [];
-
-  ngOnInit(): void {
-    this.getproducts();
-    this.Allcategories = this.productsService.categories;
-    // this.getcats();
-  }
-
-  getproducts(){
-    this.productsService.getLimitedProducts(5).subscribe({
-      next: (res) => {
-        this.products = res;  
-      },
-      error: (err) => {
-        console.log(err);
-      } 
-    });
-  }
+  Allcategories =signal<Category[]>(this.productsService.categories());
+  products = signal<Product[]>(this.productsService.products()); 
+ 
   showDetails(id: number) {
     this._router.navigate(['/user/details', id]);
   }
 
-  // getcats(){
-  //   this.productsService.getAllCategories().subscribe({
-  //   next: (res) =>{
-  //     this.Allcategories=res
-  //   },
-  //   error: (err) =>{
-  //     console.log(err)
-  //     this._router.navigate(['**'])
-
-  //   }
-  // })
-  // }
-
+  showCategoryProducts(id: number) {
+    this._router.navigate(['/user/products', id]);
+  }
 
 }

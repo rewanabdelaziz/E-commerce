@@ -27,33 +27,41 @@
               <a class="nav-link w-100" routerLink="/admin/products">Inventory</a>
             </li>
             <li class="nav-item mx-3" routerLinkActive="active">
-              <a class="nav-link w-100" href="/admin/cart">Analytics</a>
+              <a class="nav-link w-100" routerLink="/admin/cart">Analytics</a>
             </li>
         }@else if(role() == 'user'){
             <li class="nav-item mx-3" routerLinkActive="active">
-              <a class="nav-link w-100" aria-current="page" href="/user">Home</a>
+              <a class="nav-link w-100" aria-current="page" routerLink="/user/home">Home</a>
             </li>
             <li class="nav-item mx-3" routerLinkActive="active">
               <a class="nav-link w-100" routerLink="/user/products" >Shop</a>
             </li>
             <li class="nav-item mx-3" routerLinkActive="active">
+              <a class="nav-link w-100" routerLink="/user/about">About</a>
+            </li>
+            <!-- <li class="nav-item mx-3" routerLinkActive="active">
               <a class="nav-link w-100" routerLink="/user/cart" >My order</a>
-            </li>
+            </li> -->
         }@else {
-            <li class="nav-item mx-3 active">
-              <a class="nav-link w-100" aria-current="page" href="/">Home</a>
+            <li class="nav-item mx-3" routerLinkActive="active">
+              <a class="nav-link w-100" aria-current="page" routerLink="/user/home">Home</a>
             </li>
-            <li class="nav-item mx-3">
-              <a class="nav-link w-100" href="#">Shop</a>
+            <li class="nav-item mx-3" routerLinkActive="active">
+              <a class="nav-link w-100" routerLink="/user/products">Shop</a>
             </li>
-            <li class="nav-item mx-3">
-              <a class="nav-link w-100" href="#">About</a>
+            <li class="nav-item mx-3" routerLinkActive="active">
+              <a class="nav-link w-100" routerLink="/user/about">About</a>
             </li>
         }
       </ul>
 
     </div>
     <div class="buttons">
+      <div class="btn btn-cart me-3" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions"><i class="fa-solid fa-cart-arrow-down"></i>
+        @if(cartProducts().length > 0){
+          <sup class="notication bg-danger text-white rounded-circle ">{{cartProducts().length}}</sup>
+        }
+      </div>
         @if(islogged()){
             <button class="btn text-white bg-purple" (click)="logout()">logout</button>
         }@else {
@@ -65,3 +73,55 @@
       
   </div>
 </nav>
+
+<div class="offcanvas offcanvas-end elite-cart-canvas" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
+  
+  <div class="offcanvas-header py-4 px-3 border-bottom border-dark-elite">
+    <h5 class="offcanvas-title text-white fw-bold" id="offcanvasWithBothOptionsLabel">
+      <i class="fa-solid fa-bag-shopping me-2 text-purple"></i> Shopping Cart <sup class="text-white">({{cartProducts().length}})</sup>
+    </h5>
+    <button type="button" class="btn-close-white btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+
+  <div class="offcanvas-body">
+    @for(item of cartProducts(); track item.item.id){
+    <div class="cart-item-card glass-effect mb-3 p-3 position-relative">
+      <button class="btn-remove-item position-absolute" (click)="deleteProduct(item.item.id)"><i class="fa-solid fa-xmark"></i></button>
+      
+      <div class="d-flex align-items-center gap-3">
+        <div class="item-img-container">
+          <img [src]="item.item.images[0]" [alt]="item.item.title">
+        </div>
+        
+        <div class="item-details flex-grow-1">
+          <h6 class="text-white mb-1 text-truncate" style="max-width: 150px;">{{item.item.title}}</h6>
+          <div class="d-flex justify-content-between align-items-center mt-2">
+            <span class="item-price text-purple fw-bold">${{item.item.price | number:'1.2-2'}}</span>
+            
+            <div class="qty-control d-flex align-items-center">
+              <button class="qty-btn" (click)="minusQauntity(item.item.id)" [disabled]="item.quantity <= 1"><i class="fa-solid fa-minus"></i></button>
+              <span class="qty-value mx-2 text-white">{{item.quantity}}</span>
+              <button class="qty-btn" (click)="plusQauntity(item.item.id)"><i class="fa-solid fa-plus"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    }
+    
+    </div>
+
+  <div class="offcanvas-footer p-4 border-top border-dark-elite glass-effect-footer">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <span class="text-secondary fs-5">Total</span>
+      <span class="text-white fw-bold fs-4">${{total | number:'1.2-2'}}</span>
+    </div>
+    
+    <button class="btn-checkout w-100 mb-3">
+      Proceed to Checkout <i class="fa-solid fa-arrow-right ms-2"></i>
+    </button>
+    <button class="btn-continue-shopping w-100" data-bs-dismiss="offcanvas" (click)="clearCart()">
+      clear shop Cart
+    </button>
+  </div>
+</div>

@@ -1,121 +1,110 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { environment } from '../../../environments/environment';
-import { HttpClient } from '@angular/common/http';
-import { map, Observable } from 'rxjs';
-import { Iproduct } from '../../core/models/iproduct';
-import { 
-  Firestore, 
-  collection, 
-  collectionData, 
-  doc, 
-  setDoc, 
-  deleteDoc, 
-  query, 
-  where, 
-  docData,
-  limit
-} from '@angular/fire/firestore';
-import { Category } from '../components/home-slider/home-slider.component';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { Product } from '../../core/models/product';
+import { Category } from '../../core/models/category';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductsService {
-  private firestore = inject(Firestore);
-  private productsCollection = collection(this.firestore, 'products');
-
-  categories: Category[] = [
-  
-    {
-      id: 1,
-      name: "Men's Clothing",
-      slug: "men's clothing",
-      image: "https://images.pexels.com/photos/2988637/pexels-photo-2988637.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-      icon: "bi-gender-male"
-    },
-  {
-    id: 2,
-    name: "Women's Clothing",
-    slug: "women's clothing",
-    image: "https://images.pexels.com/photos/1536619/pexels-photo-1536619.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-    icon: "bi-gender-female"
-  },
-  {
-    id: 3,
-    name: "Electronics",
-    slug: "electronics",
-    image: "https://images.pexels.com/photos/356056/pexels-photo-356056.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-    icon: "bi-laptop"
-  },
-  {
-    id: 4,
-    name: "Jewelry",
-    slug: "jewelery",
-    image: "https://images.pexels.com/photos/1457801/pexels-photo-1457801.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-    icon: "bi-gem"
-  }
-  ];
-
-  getAllProducts(): Observable<Iproduct[]> {
-    return collectionData(this.productsCollection, { idField: 'id' }) as Observable<Iproduct[]>;
-  }
-
-  getLimitedProducts(count: number = 5): Observable<Iproduct[]> {
-    const q = query(this.productsCollection, limit(count));
-    return collectionData(q, { idField: 'id' }) as Observable<Iproduct[]>;
-  }
-
-  getProductsByCategory(category: string): Observable<Iproduct[]> {
-    const q = query(this.productsCollection, where('category', '==', category));
-    return collectionData(q, { idField: 'id' }) as Observable<Iproduct[]>;
-  }
-
-  async addProduct(product: Iproduct) {
-    const newDocRef = doc(this.productsCollection); // auto-generated ID
-    return await setDoc(newDocRef, { ...product, id: newDocRef.id });
-  }
-
-  async deleteProduct(productId: string) {
-    const docRef = doc(this.firestore, `products/${productId}`);
-    return await deleteDoc(docRef);
-  }
-
-  getProductsById(id: string): Observable<Iproduct> {
-  const productDocRef = doc(this.firestore, `products/${id}`);
-  return docData(productDocRef, { idField: 'id' }) as Observable<Iproduct>;
-  }
-
-  getAllCategories(): Observable<string[]> {
-    return this.getAllProducts().pipe(
-      map(products => {
-        const categories = products.map(p => p.category);
-        return [...new Set(categories)];
-      })
-    );
-  }
-
-
+  private _http=inject(HttpClient);
   baseurl=environment.apiUrl
-  products={}
+  products =signal<Product[]>([]);
+  categories = signal<Category[]>([]);
+  limit = signal<number>(9);
 
-  constructor(private _httpclient: HttpClient) { }
+  constructor() { 
+    this.getAllCategories(5).subscribe({
+      next: (res) =>{
+        this.categories.set(res)
+        // console.log(this.categories())
+      },
+      error: (err) =>{
+        console.log(err)
+      }
+    })
 
-  // getAllProducts():Observable<Iproduct[]>{
-  // return this._httpclient.get<Iproduct[]>(`${this.baseurl}/products`)
+    this.getLimitedProducts(this.limit()).subscribe({
+      next: (res) =>{
+        this.products.set(res)
+        // console.log(this.products())
+      },
+      error: (err) =>{
+        console.log(err)
+      }
+    })
+   
+  }
+
+
+
+  getAllProducts(offset: number=0):Observable<Product[]>{
+    const params = new HttpParams()
+    .set('limit', this.limit().toString())
+    .set('offset', offset.toString());
+    return this._http.get<Product[]>(`${this.baseurl}/products`, { params });
+
+  }
+
+  getLimitedProducts(count: number = 5, offset: number = 15): Observable<Product[]> {
+    const params = new HttpParams()
+    .set('limit', count.toString())
+    .set('offset', offset.toString());
+    return this._http.get<Product[]>(`${this.baseurl}/products`, { params });
+  }
+
+  getProductbycatId(categoryId: number, offset: number = 0): Observable<Product[]> {
+    const params = new HttpParams()
+    .set('categoryId', categoryId.toString())
+    .set('limit', this.limit().toString())
+    .set('offset', offset.toString());
+    return this._http.get<Product[]>(`${this.baseurl}/products`, { params });
+  }
+
+  getProductsById(id: number): Observable<Product> {
+   return this._http.get<Product>(`${this.baseurl}/products/${id}`);
+  }
+
+  deleteProduct(productId: number) {
+   return this._http.delete(`${this.baseurl}/products/${productId}`);
+  }
+
+  getAllCategories(limit: number = 10): Observable<Category[]> {
+    const params = new HttpParams()
+    .set('limit', limit.toString());
+    return this._http.get<Category[]>(`${this.baseurl}/categories`, { params });
+  }
+
+
+
+
+
+
+
+
+
+  // async addProduct(product: Iproduct) {
+  //   const newDocRef = doc(this.productsCollection); // auto-generated ID
+  //   return await setDoc(newDocRef, { ...product, id: newDocRef.id });
   // }
 
-  // getAllCategories():Observable<[]>{
-  // return this._httpclient.get<[]>(`${this.baseurl}/products/categories`)
-  // }
 
-  // getProductsByCategory(category:string):Observable<Iproduct[]>{
-  // return this._httpclient.get<Iproduct[]>(`${this.baseurl}/products/category/${category}`)
-  // }
 
-  // getProductsById(id:number):Observable<Iproduct>{
-  // return this._httpclient.get<Iproduct>(`${this.baseurl}/products/${id}`)
-  // }
+
+
+  
+
+
+  
+
+  
+
+
+
+
 
 
 }
