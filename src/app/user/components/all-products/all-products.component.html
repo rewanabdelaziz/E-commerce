@@ -32,14 +32,20 @@
           }
         </div>
 
-        <div class="filter-group mb-4">
+        <div class="filter-group mb-4 price-range-container">
           <h6>Price Range</h6>
-          <input type="range" class="form-range custom-range" min="0" max="2000">
-          <div class="d-flex justify-content-between text-secondary small">
+          <ngx-slider [(value)]="minValue" 
+                      [(highValue)]="maxValue" 
+                      [options]="options"
+                      (userChangeEnd)=" filterByPrice()">
+          </ngx-slider>
+          <div class="values-display d-flex justify-content-between">
             <span>$0</span>
             <span>$2000</span>
           </div>
         </div>
+
+
       </div>
     </aside>
 
@@ -77,7 +83,8 @@
 
         @if(isMoreData()){
          <div class="text-center"><button class="btn btn-primary" (click)="loadMore()">Load More</button></div>
-        }@else {
+        }@else if(!isMoreData() && Products().length > 0){
+           
           <div class="text-center"><span class="text-secondary">No more products to load.</span></div>
         }
         

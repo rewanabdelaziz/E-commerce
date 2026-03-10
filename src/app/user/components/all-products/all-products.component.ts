@@ -3,13 +3,16 @@ import { ProductsService } from '../../services/products.service';
 import { ActivatedRoute, Router} from '@angular/router';
 import { Category } from '../../../core/models/category';
 import { Product } from '../../../core/models/product';
-import { DecimalPipe } from '@angular/common'
+import { CommonModule, DecimalPipe } from '@angular/common'
 import { FormsModule} from '@angular/forms';
 import { UserCartService } from '../../services/userCart.service';
+import { NgxSliderModule } from '@angular-slider/ngx-slider';
+import { Options } from '@angular-slider/ngx-slider';
+
 @Component({
   selector: 'app-all-products',
   standalone: true,
-  imports: [DecimalPipe,FormsModule],
+  imports: [DecimalPipe,FormsModule,CommonModule,NgxSliderModule],
   templateUrl: './all-products.component.html',
   styleUrls: ['./all-products.component.css']
 })
@@ -18,8 +21,8 @@ export class AllProductsComponent implements OnInit {
   Products = signal<Product[]>([]);
   cart:{item:Product,quantity:number}[]=[]
   Allcategories: Category[] = [];
-  category:string='all';
-  selectedCategoryId: number | null = null;
+  // category:string='all';
+  selectedCategoryId=signal<number | null>(null);
   isfiltered= signal<boolean>(false)
   offset = signal<number>(0);
   isMoreData = signal<boolean>(true);
@@ -29,6 +32,16 @@ export class AllProductsComponent implements OnInit {
   private _activatedRoute = inject(ActivatedRoute);
   private _cartService = inject(UserCartService);
 
+  minValue=signal(0);
+  maxValue=signal(2000);
+  options: Options = {
+    floor: 0,
+    ceil: 2000,
+    step: 10,
+    hideLimitLabels: true, 
+    hidePointerLabels: false 
+  };
+
 
 
   ngOnInit() {
@@ -37,7 +50,7 @@ export class AllProductsComponent implements OnInit {
       this.offset.set(0);
       if (categoryId) {
         this.getProductbycat(+categoryId);
-        this.selectedCategoryId = +categoryId;
+        this.selectedCategoryId.set(+categoryId);
       } else {
         this.clearFilters();
       }
@@ -48,17 +61,18 @@ export class AllProductsComponent implements OnInit {
 
   clearFilters(){
     this.isfiltered.set(false)
-    this.selectedCategoryId = null
+    this.selectedCategoryId.set(null);
+    this.minValue.set(0);
+    this.maxValue.set(2000);
     this.resetPagination();
     this.fetchData();
   }
 
-  getProductbycat(id:number, offset: number = 0){
+  getProductbycat(id:number){
     this.isfiltered.set(true)
-    this.selectedCategoryId = id;
+    this.selectedCategoryId.set(id);
     this.resetPagination();
-    this.fetchData();
-    
+    this.fetchData(); 
   }
 
   getcats(){
@@ -74,34 +88,58 @@ export class AllProductsComponent implements OnInit {
     }
   })
   }
+
+  filterByPrice() {
+    this.resetPagination();
+    this.fetchData();
+  }
+
   resetPagination() {
     this.offset.set(0);
     this.Products.set([]); 
     this.isMoreData.set(true);
   }
+
   fetchData() {
     const currentOffset = this.offset();
-    if (this.isfiltered() && this.selectedCategoryId) {
-      this._products.getProductbycatId(this.selectedCategoryId, currentOffset).subscribe({
-        next: (res) => {
-          this.Products.update(prd => [...prd, ...res])
-          if (res.length === 0 || res.length < this._products.limit()) {
-            this.isMoreData.set(false);
-          }
-        },
-        error: (err) => this._router.navigate(['**'])
-      });
-    } else {
-      this._products.getAllProducts(currentOffset).subscribe({
-        next: (res) => {
-          this.Products.update(prd => [...prd, ...res])
-          if (res.length === 0 || res.length < this._products.limit()) {
-            this.isMoreData.set(false);
-          }
-        },
-        error: (err) => this._router.navigate(['**'])
-      });
-    }
+    const min = this.minValue();
+    const max = this.maxValue();
+    const catId = this.selectedCategoryId();
+
+    
+    this._products.filterProductsByCategoryAndPrice(catId, min, max,currentOffset).subscribe({
+      next: (res) => {
+        this.Products.update(prd => [...prd, ...res])
+        if (res.length === 0 || res.length < this._products.limit()) {
+          this.isMoreData.set(false);
+        }
+      },
+      error: (err) => this._router.navigate(['**'])
+    });
+    
+
+
+    // if (this.isfiltered() && catId !== null) {
+    //   this._products.getProductbycatId(catId, currentOffset).subscribe({
+    //     next: (res) => {
+    //       this.Products.update(prd => [...prd, ...res])
+    //       if (res.length === 0 || res.length < this._products.limit()) {
+    //         this.isMoreData.set(false);
+    //       }
+    //     },
+    //     error: (err) => this._router.navigate(['**'])
+    //   });
+    // } else {
+    //   this._products.getAllProducts(currentOffset).subscribe({
+    //     next: (res) => {
+    //       this.Products.update(prd => [...prd, ...res])
+    //       if (res.length === 0 || res.length < this._products.limit()) {
+    //         this.isMoreData.set(false);
+    //       }
+    //     },
+    //     error: (err) => this._router.navigate(['**'])
+    //   });
+    // }
 
   }
 
@@ -113,9 +151,35 @@ export class AllProductsComponent implements OnInit {
   addToCart(prd:Product){
     this._cartService.addToCart(prd)
   }
+
   showDetails(id: number) {
     this._router.navigate(['/user/details', id]);
   }
+
+  // filterByPrice(){
+  //   if(this.selectedCategoryId){
+  //     this.Products().filter(prd => prd.price >= this.minValue() && prd.price <= this.maxValue())
+
+  //   }else{
+  //     this._products.filterProductsByPrice(this.minValue(), this.maxValue()).subscribe({
+  //     next: (res) =>{
+  //       this.Products.set(res)
+  //       if (res.length === 0 || res.length < this._products.limit()) {
+  //           this.isMoreData.set(false);
+  //       }
+  //       // console.log(this.products)
+  //     },
+  //     error: (err) =>{
+  //       console.log(err)
+  //       this._router.navigate(['**'])
+  //     }
+  //   })
+  //   }
+   
+    
+  // }
+
+ 
 
 
 

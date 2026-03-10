@@ -41,13 +41,13 @@ export class ProductsService {
 
 
 
-  getAllProducts(offset: number=0):Observable<Product[]>{
-    const params = new HttpParams()
-    .set('limit', this.limit().toString())
-    .set('offset', offset.toString());
-    return this._http.get<Product[]>(`${this.baseurl}/products`, { params });
+  // getAllProducts(offset: number=0):Observable<Product[]>{
+  //   const params = new HttpParams()
+  //   .set('limit', this.limit().toString())
+  //   .set('offset', offset.toString());
+  //   return this._http.get<Product[]>(`${this.baseurl}/products`, { params });
 
-  }
+  // }
 
   getLimitedProducts(count: number = 5, offset: number = 15): Observable<Product[]> {
     const params = new HttpParams()
@@ -56,13 +56,13 @@ export class ProductsService {
     return this._http.get<Product[]>(`${this.baseurl}/products`, { params });
   }
 
-  getProductbycatId(categoryId: number, offset: number = 0): Observable<Product[]> {
-    const params = new HttpParams()
-    .set('categoryId', categoryId.toString())
-    .set('limit', this.limit().toString())
-    .set('offset', offset.toString());
-    return this._http.get<Product[]>(`${this.baseurl}/products`, { params });
-  }
+  // getProductbycatId(categoryId: number, offset: number = 0): Observable<Product[]> {
+  //   const params = new HttpParams()
+  //   .set('categoryId', categoryId.toString())
+  //   .set('limit', this.limit().toString())
+  //   .set('offset', offset.toString());
+  //   return this._http.get<Product[]>(`${this.baseurl}/products`, { params });
+  // }
 
   getProductsById(id: number): Observable<Product> {
    return this._http.get<Product>(`${this.baseurl}/products/${id}`);
@@ -76,6 +76,26 @@ export class ProductsService {
     const params = new HttpParams()
     .set('limit', limit.toString());
     return this._http.get<Category[]>(`${this.baseurl}/categories`, { params });
+  }
+
+  // filterProductsByPrice(minPrice: number, maxPrice: number): Observable<Product[]> {
+  //   const params = new HttpParams()
+  //     .set('price_min', minPrice.toString())
+  //     .set('price_max', maxPrice.toString());
+  //   return this._http.get<Product[]>(`${this.baseurl}/products`, { params });
+  // }
+
+  filterProductsByCategoryAndPrice(categoryId: number | null, minPrice: number = 0, maxPrice: number = 2000, offset: number ): Observable<Product[]> {
+    let params = new HttpParams()
+      .set('price_min', minPrice.toString())
+      .set('price_max', maxPrice.toString())
+      .set('limit', this.limit().toString())
+      .set('offset', offset.toString());
+
+    if (categoryId !== null) {
+      params = params.set('categoryId', categoryId.toString());
+    }
+    return this._http.get<Product[]>(`${this.baseurl}/products`, { params });
   }
 
 

@@ -39,7 +39,7 @@ export class AdminProductsComponent implements OnInit{
   }
 
   getAllProducts(){
-    this._productService.getAllProducts().subscribe({
+    this._productService.filterProductsByCategoryAndPrice(null, 0, 2000, 0).subscribe({
       next: (res)=>{
         this.products=res
       },
