@@ -15,6 +15,8 @@ import { DecimalPipe } from '@angular/common';
 })
 export class HeaderComponent implements OnInit {
   private _auth = inject(AuthService)
+  
+  user = this._auth.currentUser 
   role = this._auth.userRole
   islogged = this._auth.isLoggedIn
 
@@ -32,6 +34,7 @@ export class HeaderComponent implements OnInit {
   ngOnInit(): void {
     // this.getCartProducts();
     this.getTotalPrice();
+    
   }
 
   // getCartProducts(){
@@ -95,7 +98,7 @@ export class HeaderComponent implements OnInit {
         return {productId:prd.item.id, quantity: prd.quantity}
       })
       let model:IcartModel ={
-        userId: (user?.uid)? user?.uid : 1,
+        userId: (user?.id)? user?.id : 1,
         date: new Date(),
         products: mapProducts
       }

@@ -29,7 +29,7 @@
             <li class="nav-item mx-3" routerLinkActive="active">
               <a class="nav-link w-100" routerLink="/admin/cart">Analytics</a>
             </li>
-        }@else if(role() == 'user'){
+        }@else if(role() == 'customer'){
             <li class="nav-item mx-3" routerLinkActive="active">
               <a class="nav-link w-100" aria-current="page" routerLink="/user/home">Home</a>
             </li>
@@ -39,9 +39,9 @@
             <li class="nav-item mx-3" routerLinkActive="active">
               <a class="nav-link w-100" routerLink="/user/about">About</a>
             </li>
-            <!-- <li class="nav-item mx-3" routerLinkActive="active">
+            <li class="nav-item mx-3" routerLinkActive="active">
               <a class="nav-link w-100" routerLink="/user/cart" >My order</a>
-            </li> -->
+            </li>
         }@else {
             <li class="nav-item mx-3" routerLinkActive="active">
               <a class="nav-link w-100" aria-current="page" routerLink="/user/home">Home</a>
@@ -56,17 +56,30 @@
       </ul>
 
     </div>
-    <div class="buttons">
+    <div class="buttons d-flex">
       <div class="btn btn-cart me-3" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions"><i class="fa-solid fa-cart-arrow-down"></i>
         @if(cartProducts().length > 0){
           <sup class="notication bg-danger text-white rounded-circle ">{{cartProducts().length}}</sup>
         }
       </div>
         @if(islogged()){
-            <button class="btn text-white bg-purple" (click)="logout()">logout</button>
+          <div class="d-flex align-items-center gap-3">
+              <div class="user-profile d-flex align-items-center gap-2 px-2 py-1 rounded-pill glass-effect" [attr.title]="user()?.name">
+                  <img [src]="user()?.avatar" 
+                       [alt]="user()?.name" 
+                       class="user-avatar rounded-circle border border-2 border-purple" 
+                       style="width: 30px; height: 30px;">
+                  <span class="text-white d-none d-md-inline fw-medium small">{{ user()?.name }}</span>
+              </div>
+      
+              <button class="btn text-white bg-purplel px-3 btn-logout" (click)="logout()">
+                  <i class="fa-solid fa-arrow-right-from-bracket me-1"></i> Logout
+              </button>
+          </div>
+            
         }@else {
-            <button class="btn text-white log px-3 me-2">login</button>
-            <button class="btn text-white bg-purple">Register</button>
+            <button class="btn text-white log px-3 me-2" routerLink="/auth/login">login</button>
+            <button class="btn text-white bg-purple" routerLink="/auth/signup">Register</button>
         }
     </div>
         

@@ -8,6 +8,15 @@
 .navbar-brand{
     font-weight: 600;
 }
+.btn-logout{
+    background-color: var(--main-purple);
+}
+.btn-logout:hover{
+    background-color: var(--btn-hover);
+}
+.user-profile{
+    cursor: pointer;
+}
 nav{
     position: sticky;
     top: 0;
@@ -48,10 +57,9 @@ nav{
     color: var(--text-light) !important;
 }
 
-/* الـ Container الأساسي للـ Offcanvas */
+
 .elite-cart-canvas {
-    background-color: #0f172a !important; /* نفس لون الـ Background الغامق */
-    width: 400px !important;
+    background-color: #0f172a !important; 
     border-left: 1px solid rgba(255, 255, 255, 0.05);
 }
 
@@ -59,7 +67,7 @@ nav{
     border-color: rgba(255, 255, 255, 0.1) !important;
 }
 
-/* كارت المنتج داخل السلة */
+
 .cart-item-card {
     background: rgba(30, 41, 59, 0.5);
     border: 1px solid rgba(255, 255, 255, 0.05);
@@ -81,7 +89,7 @@ nav{
     object-fit: contain;
 }
 
-/* أزرار التحكم في الكمية */
+
 .qty-control {
     background: rgba(15, 23, 42, 0.6);
     border-radius: 8px;
@@ -101,7 +109,7 @@ nav{
     color: var(--main-purple);
 }
 
-/* زرار المسح (X) */
+
 .btn-remove-item {
     top: 10px;
     right: 10px;
@@ -116,7 +124,7 @@ nav{
     color: #ef4444;
 }
 
-/* أزرار الـ Checkout */
+
 .btn-checkout {
     background: var(--main-purple);
     color: white;

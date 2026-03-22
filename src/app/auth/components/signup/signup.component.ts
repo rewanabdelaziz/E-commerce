@@ -1,8 +1,9 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../service/auth.service';
 import { UserProfile } from '../../../core/models/user';
 import { Router, RouterLink } from '@angular/router';
+import { CryptoService } from '../../service/crypto.service';
 
 @Component({
   selector: 'app-signup',
@@ -12,11 +13,14 @@ import { Router, RouterLink } from '@angular/router';
   styleUrl: './signup.component.css'
 })
 export class SignupComponent {
+  private _auth = inject(AuthService)
+  private _route = inject(Router)
+  private _encryptService = inject(CryptoService)
   signupForm:FormGroup
   errorMessage = signal<string | null>(null);
   isLoading = signal<boolean>(false);
 
-  constructor(private _auth:AuthService, private _route:Router){
+  constructor(){
     this.signupForm=new FormGroup({
       userName: new FormControl('',[Validators.required,Validators.pattern(/^[a-zA-Z0-9 ]{3,20}$/)]),
       email: new FormControl('',[Validators.required,Validators.email,Validators.pattern(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/)]),
@@ -35,31 +39,43 @@ export class SignupComponent {
   get password(){
     return this.signupForm.get('password')
   }
-
-
-  async onSignUp(){
+  
+  onSignUp(){
     if (this.signupForm.invalid) {
       this.signupForm.markAllAsTouched();  
       return;
     }
-
-    this.isLoading.set(true);
-    this.errorMessage.set(null);
-
+    this.errorMessage.set(null)
+    this.isEmailExist()
     const newUser:UserProfile={
-      userName:this.userName?.value.trim(),
-      email:this.email?.value,
+      name:this.userName?.value.trim(),
+      email:this.email?.value,  
       password:this.password?.value,
+      avatar:`https://ui-avatars.com/api/?name=${encodeURIComponent(this.userName?.value.trim())}&background=6C63FF&color=0f172a`
     }
-
-    try {
-      await this._auth.addNewUser(newUser)
-    } catch (error:any) {
-      this.errorMessage.set(error)
-    } finally{
-      this.isLoading.set(false)
-    }
-    
-    // console.log(newUser)
+    this._auth.SignUp(newUser).subscribe({
+      next: (res :any)=>{
+        // console.log(res)
+        this._route.navigateByUrl('/auth/login')
+      },
+      error: (err)=>{ 
+        this.errorMessage.set(err.error.message || 'An error occurred during sign up. Please try again.')
+      }
+    })
   }
+
+ async isEmailExist(){
+    const email = this.email?.value;  
+    if (email) {
+      const isEmailExist: boolean = await this._auth.checkEmailExistence(email);
+      if (!isEmailExist) {
+        this.errorMessage.set('This email is already registered. Please log in instead.');
+      } else {
+        this.errorMessage.set(null);
+       }
+      } else {
+        this.errorMessage.set('Please enter an email.');
+      }
+  }
+
 }

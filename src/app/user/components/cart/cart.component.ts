@@ -86,7 +86,7 @@ export class CartComponent implements OnInit {
       return {productId:prd.item.id, quantity: prd.quantity}
     })
     let model:IcartModel ={
-      userId: (user?.uid)? user?.uid : 1,
+      userId: (user?.id)? user?.id : 1,
       date: new Date(),
       products: mapProducts
     }

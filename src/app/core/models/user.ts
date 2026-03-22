@@ -1,8 +1,9 @@
 export interface UserProfile {
-  uid?:number,
-  userName:string,
+  id?:number,
+  name:string,
   email:string,
   password:string,
-  role?: UserRole
+  role?: UserRole,
+  avatar: string
 }
-export type UserRole = 'guest' | 'user' | 'admin';
+export type UserRole = 'customer' | 'guest' | 'admin';
