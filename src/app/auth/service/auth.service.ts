@@ -29,7 +29,7 @@ export class AuthService {
   
   // signUp
   SignUp(user:UserProfile){
-    return this._http.post(`${this.baseUrl}/users/`,user)
+    return this._http.post(`${this.baseUrl}users/`,user)
   }
   
   // check email existance
@@ -37,7 +37,7 @@ export class AuthService {
     try {
       // convert observable to promise
       const res = await firstValueFrom(
-      this._http.post<{ isAvailable: boolean }>(`${this.baseUrl}/users/is-available`, { email })
+      this._http.post<{ isAvailable: boolean }>(`${this.baseUrl}users/is-available`, { email })
     );
     return res.isAvailable;
     } catch (error) {
@@ -48,12 +48,12 @@ export class AuthService {
   
   // login
   login(email:string,password:string){
-    return this._http.post(`${this.baseUrl}/auth/login`,{'email':email,'password':password})
+    return this._http.post(`${this.baseUrl}auth/login`,{'email':email,'password':password})
   }
  
   // get current user
   getCurrentUser() {
-    this._http.get<UserProfile>(`${this.baseUrl}/auth/profile`).subscribe({
+    this._http.get<UserProfile>(`${this.baseUrl}auth/profile`).subscribe({
       next: (res) => {
         this.currentUser.set(res);
         this.userRole.set(res.role!)
@@ -68,7 +68,7 @@ export class AuthService {
     let refresh_token = localStorage.getItem('refresh_token')
     if(refresh_token){
       refresh_token = this._cryptoService.decrypt(refresh_token)
-      this._http.post(`${this.baseUrl}/auth/refresh-token`,{'refreshToken': refresh_token}).subscribe({
+      this._http.post(`${this.baseUrl}auth/refresh-token`,{'refreshToken': refresh_token}).subscribe({
         next: (res:any) => {
           const newToken = this._cryptoService.encrypt(res.access_token);
           localStorage.setItem('access_token',newToken)
