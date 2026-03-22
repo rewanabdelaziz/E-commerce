@@ -11,6 +11,6 @@ export class AdminProductsService {
   baseurl=environment.apiUrl
   constructor(private _httpclient: HttpClient) { }
   AddNewProduct(product:Product){
-    return this._httpclient.post(`${this.baseurl}/products`,product)
+    return this._httpclient.post(`${this.baseurl}products`,product)
   }
 }

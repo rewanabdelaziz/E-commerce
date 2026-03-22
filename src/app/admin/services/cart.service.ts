@@ -14,14 +14,14 @@ baseurl=environment.apiUrl
     if(prms){
       let params = new HttpParams()
       params = params.append("startdate", prms?.start).append("enddate", prms?.end)
-      return this._httpclient.get(`${this.baseurl}/carts`,{params})
+      return this._httpclient.get(`${this.baseurl}carts`,{params})
     }else{
-      return this._httpclient.get(`${this.baseurl}/carts`)
+      return this._httpclient.get(`${this.baseurl}carts`)
     }
   }
 
   deleteCart(id:number){
-    return this._httpclient.delete(`${this.baseurl}/carts/${id}`)
+    return this._httpclient.delete(`${this.baseurl}carts/${id}`)
   }
 
 
