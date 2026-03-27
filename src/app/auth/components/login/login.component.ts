@@ -13,6 +13,7 @@ import { CryptoService } from '../../service/crypto.service';
 })
 export class LoginComponent {
   msgError = signal<string | null>(null)
+  isloading = signal<boolean>(false);
   logInForm:FormGroup
   private _auth= inject(AuthService)
   private _route= inject(Router)
@@ -33,14 +34,22 @@ export class LoginComponent {
     return this.logInForm.get('password')
   }
 
-  onLogIn(){
+  async onLogIn(){
     this.msgError.set(null)
+    this.isloading.set(true)
+    
     if(this.logInForm.valid){
       const {email,password} = this.logInForm.value
-      this.isEmailExist()
+      
+      const isEmailExist = await this.isEmailExist()
+      // if true and email not registered
+      if(!isEmailExist){
+        this.isloading.set(true)
+        return
+      }
 
       this._auth.login(email,password).subscribe({
-        next: (res: any)=>{
+        next: async (res: any)=>{
           
           // console.log(res)
           let { access_token, refresh_token } = res;
@@ -49,8 +58,8 @@ export class LoginComponent {
   
           localStorage.setItem('access_token', access_token); 
           localStorage.setItem('refresh_token', refresh_token); 
-          this._auth.getCurrentUser()
-          this._route.navigateByUrl('/user/home')
+          await this._auth.getCurrentUser()
+          this._route.navigate(['/user', 'home'])
         },
         error: (err)=>{
           // console.log(err)
@@ -59,6 +68,7 @@ export class LoginComponent {
           }else{
           this.msgError.set(err.error.message || 'An error occurred during login. Please try again.')
           }
+          this.isloading.set(true)
         }
       })
     } else {
@@ -67,18 +77,22 @@ export class LoginComponent {
    
   }
 
-  async isEmailExist(){
+  async isEmailExist(): Promise<boolean>{
     const email = this.email?.value;
     if (email) {
       const isEmailExist: boolean = await this._auth.checkEmailExistence(email);
-      if (!isEmailExist) {
+      // if return false means user already registered!
+      if (isEmailExist) {
         this.msgError.set('This email is not registered. Please sign up first.');
+        return false
       } else {
         this.msgError.set(null);
+        return true
       }
       
     } else {
       this.msgError.set('Please enter an email to check.');
+      return false
     }
 
   }
@@ -89,5 +103,6 @@ export class LoginComponent {
       email: 'john@mail.com',
       password: 'changeme'
     });
+    
   }
 }

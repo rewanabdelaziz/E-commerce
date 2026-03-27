@@ -17,13 +17,14 @@ export class AuthService {
   
   currentUser = signal<UserProfile | null>(null);
   userRole = signal<UserRole>('guest')
-  isLoggedIn = computed(()=> !!this.currentUser())
+  isLoggedIn = signal<boolean>(!!localStorage.getItem('access_token'));
   
   // app intit
-  initAuth() {
+  async initAuth() {
     const token = localStorage.getItem('access_token');
     if (token) {
-      this.getCurrentUser();
+      await this.getCurrentUser();
+      this.isLoggedIn.set(true)
     }
   }
   
@@ -32,7 +33,7 @@ export class AuthService {
     return this._http.post(`${this.baseUrl}users/`,user)
   }
   
-  // check email existance
+  // check email existance (false means user already registered)
   async checkEmailExistence(email: string):Promise<boolean> {
     try {
       // convert observable to promise
@@ -48,18 +49,22 @@ export class AuthService {
   
   // login
   login(email:string,password:string){
-    return this._http.post(`${this.baseUrl}auth/login`,{'email':email,'password':password})
+    return this._http.post(`${this.baseUrl}auth/login`,{'email':email,'password':password}) 
   }
  
   // get current user
-  getCurrentUser() {
-    this._http.get<UserProfile>(`${this.baseUrl}auth/profile`).subscribe({
-      next: (res) => {
-        this.currentUser.set(res);
-        this.userRole.set(res.role!)
-       
-      }
-    });
+  async getCurrentUser(): Promise<UserProfile| null> {
+    try {
+      // convert observable to promise
+      const res = await firstValueFrom(this._http.get<UserProfile>(`${this.baseUrl}auth/profile`));
+      this.currentUser.set(res);
+      this.userRole.set(res.role!);
+      this.isLoggedIn.set(true);
+      return res;
+    } catch (err) {
+      this.logout();
+      return null;
+    }
   }
 
 
@@ -84,8 +89,9 @@ export class AuthService {
   //  logout
   logout() {
     this.currentUser.set(null);
+     this.isLoggedIn.set(false);
     localStorage.removeItem('access_token')
-    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('refresh_token');
     this.router.navigate(['/auth/login'])
   }
 

@@ -1,5 +1,5 @@
 export const environment = {
-  apiUrl: 'https://api.escuelajs.co/api/v1',
+  apiUrl: 'https://api.escuelajs.co/api/v1/',
   production: true,
   firebaseConfig: {
     apiKey: "AIzaSyC5iB1kmtf3WeaV0Xx4D5ywiWtMGPegt0w",

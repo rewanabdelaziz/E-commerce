@@ -73,13 +73,13 @@
       </div>
       
       
-      @if(!!msgError()){
+      @if(!!msgError() && isloading()){
         <div class="form-group text-center my-2">
           <small class="bg-danger text-light p-1">{{msgError()}}</small>
         </div>
       }
       <button type="submit" class="btn w-100 mb-2" [disabled]="logInForm.invalid">Login</button>
-      <button class="btn w-100" (click)="fillDemoData()">Fill Demo Data</button>
+      <button class="btn w-100"type="button" (click)="fillDemoData()">Fill Demo Data</button>
     </form>
     <p class="text-center mt-3">Don't have an account? <a routerLink="/auth/signup">Sign up</a></p>
   </div>
