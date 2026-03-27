@@ -1,3 +1,6 @@
+nav{
+    z-index: 2000 !important;
+}
 .nav-link{
     color: var(--text-light) !important;
 }
