@@ -92,6 +92,7 @@ export class AuthService {
      this.isLoggedIn.set(false);
     localStorage.removeItem('access_token')
     localStorage.removeItem('refresh_token');
+    localStorage.removeItem('cart');
     this.router.navigate(['/auth/login'])
   }
 
