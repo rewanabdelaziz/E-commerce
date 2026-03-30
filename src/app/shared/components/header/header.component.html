@@ -8,7 +8,7 @@
         <path d="M3 6h18"></path>
         <path d="M16 10a4 4 0 0 1-8 0"></path>
       </svg>
-      <a class="navbar-brand text-purple ms-2" href="/">EliteCommerce</a>
+      <a class="navbar-brand text-purple ms-2" routerLink="/user/home">EliteCommerce</a>
     </div>
 
     <div class="d-flex align-items-center order-lg-3 gap-2">
@@ -53,7 +53,16 @@
         
         <li class="nav-item d-lg-none mt-3 border-top pt-3 border-secondary">
           @if(islogged()){
-            <button class="btn text-white bg-purple w-100" (click)="logout()">Logout</button>
+            <div class="d-flex align-items-center justify-content-center gap-3 mb-3">
+                <img [src]="user()?.avatar" class="rounded-circle border border-2 border-purple" style="width: 45px; height: 45px;">
+                <div class="text-start">
+                    <p class="text-white mb-0 fw-bold">{{ user()?.name }}</p>
+                    <small class="user-name">Active Session</small>
+                </div>
+            </div>
+            <button class="btn text-white bg-purple w-100 py-2" (click)="logout()">
+              <i class="fa-solid fa-arrow-right-from-bracket me-2"></i> Logout
+            </button>
           } @else {
             <button class="btn text-white log w-100 mb-2" routerLink="/auth/login">Login</button>
             <button class="btn text-white bg-purple w-100" routerLink="/auth/signup">Register</button>

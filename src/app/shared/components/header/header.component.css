@@ -2,6 +2,10 @@
     color: var(--text-light) !important;
     transition: all 0.3s ease;
 }
+.user-name{
+    color: var(--text-muted);
+    font-size: 0.8rem;
+}
 .brand svg{
     background-color: var(--main-purple) !important;
     margin-right: 10px;
