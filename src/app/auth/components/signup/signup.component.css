@@ -1,7 +1,10 @@
-
 .input-group-text{
     background-color: var(--secondary-color);
     color: var(--primary-color);
+}
+small{
+    color: var(--error-red);
+    background-color: var(--error-bg);
 }
 p,span i{
     color: var(--text-muted);

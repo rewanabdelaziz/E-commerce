@@ -9,6 +9,8 @@
   --btn-hover:#5a52e0;
   --text-primary: #ffffff;
   --success-green: #22c55e;
+  --error-red: #ff4d4d; /* أو #ef4444 لو عايزة درجة أهدى شوية */
+  --error-bg: rgba(239, 68, 68, 0.1);
 }
 
 body {
