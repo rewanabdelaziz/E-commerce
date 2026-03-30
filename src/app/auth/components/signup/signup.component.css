@@ -2,6 +2,10 @@
     background-color: var(--secondary-color);
     color: var(--primary-color);
 }
+.container{
+    width: 455px;
+    min-width: none;
+}
 small{
     color: var(--error-red);
     background-color: var(--error-bg);
@@ -60,6 +64,9 @@ a{
     }
     .card{
         width: auto !important;
+    }
+    .container{
+        width: 100% !important;
     }
 
 }
