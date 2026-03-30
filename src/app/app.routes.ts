@@ -23,8 +23,8 @@ export const routes: Routes = [
     path: 'user',
     loadChildren: () =>
       import('./user/user.routes').then((m) => m.userRoutes),
-    canActivate:[authGuard,roleGuard],
-    data: { expectedRole: 'customer' }
+    canActivate:[roleGuard],
+    data: { expectedRole: ['customer', 'guest'] }
   },
   {
     path: '**',
