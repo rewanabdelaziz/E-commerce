@@ -8,6 +8,7 @@ import { FormsModule} from '@angular/forms';
 import { UserCartService } from '../../services/userCart.service';
 import { NgxSliderModule } from '@angular-slider/ngx-slider';
 import { Options } from '@angular-slider/ngx-slider';
+import { AuthService } from '../../../auth/service/auth.service';
 
 @Component({
   selector: 'app-all-products',
@@ -31,6 +32,7 @@ export class AllProductsComponent implements OnInit {
   private _router = inject(Router);
   private _activatedRoute = inject(ActivatedRoute);
   private _cartService = inject(UserCartService);
+  private _auth = inject(AuthService);
 
   minValue=signal(0);
   maxValue=signal(2000);
@@ -118,29 +120,6 @@ export class AllProductsComponent implements OnInit {
     });
     
 
-
-    // if (this.isfiltered() && catId !== null) {
-    //   this._products.getProductbycatId(catId, currentOffset).subscribe({
-    //     next: (res) => {
-    //       this.Products.update(prd => [...prd, ...res])
-    //       if (res.length === 0 || res.length < this._products.limit()) {
-    //         this.isMoreData.set(false);
-    //       }
-    //     },
-    //     error: (err) => this._router.navigate(['**'])
-    //   });
-    // } else {
-    //   this._products.getAllProducts(currentOffset).subscribe({
-    //     next: (res) => {
-    //       this.Products.update(prd => [...prd, ...res])
-    //       if (res.length === 0 || res.length < this._products.limit()) {
-    //         this.isMoreData.set(false);
-    //       }
-    //     },
-    //     error: (err) => this._router.navigate(['**'])
-    //   });
-    // }
-
   }
 
   loadMore(){
@@ -148,7 +127,12 @@ export class AllProductsComponent implements OnInit {
     this.fetchData();    
   }
 
-  addToCart(prd:Product){
+  addToCart(prd:Product, event: any){
+    event.stopPropagation();
+    if(!this._auth.isLoggedIn()){
+      this._router.navigate(['/auth/login'])
+      return
+    }
     this._cartService.addToCart(prd)
   }
 
@@ -156,30 +140,7 @@ export class AllProductsComponent implements OnInit {
     this._router.navigate(['/user/details', id]);
   }
 
-  // filterByPrice(){
-  //   if(this.selectedCategoryId){
-  //     this.Products().filter(prd => prd.price >= this.minValue() && prd.price <= this.maxValue())
 
-  //   }else{
-  //     this._products.filterProductsByPrice(this.minValue(), this.maxValue()).subscribe({
-  //     next: (res) =>{
-  //       this.Products.set(res)
-  //       if (res.length === 0 || res.length < this._products.limit()) {
-  //           this.isMoreData.set(false);
-  //       }
-  //       // console.log(this.products)
-  //     },
-  //     error: (err) =>{
-  //       console.log(err)
-  //       this._router.navigate(['**'])
-  //     }
-  //   })
-  //   }
-   
-    
-  // }
-
- 
 
 
 
