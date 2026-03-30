@@ -1,8 +1,6 @@
-nav{
-    z-index: 2000 !important;
-}
 .nav-link{
     color: var(--text-light) !important;
+    transition: all 0.3s ease;
 }
 .brand svg{
     background-color: var(--main-purple) !important;
@@ -23,7 +21,7 @@ nav{
 nav{
     position: sticky;
     top: 0;
-    z-index: 1000;
+    z-index: 2000 !important;
     padding: 15px;
     border-bottom: 1px solid var(--glass-border);
     background-color: var(--dark-bg) !important;
@@ -41,6 +39,8 @@ nav{
     color:var(--text-muted);
     border: none;
     font-size: 1.2rem;
+    position: relative;
+    transition: all 0.3s ease;
 }
 .btn-cart:hover{
     color: var(--main-purple);
@@ -174,4 +174,45 @@ nav{
     height: 20px;
     padding: 10px 2px;
     text-align: center;
+}
+.custom-toggler:hover,.custom-toggler:active{
+    border-color: var(--main-purple) !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+.custom-toggler.navbar-toggler {
+    border-color: var(--glass-border);
+}
+.custom-toggler .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='white' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+@media (max-width: 991px) {
+    .navbar-collapse {
+        background-color: var(--dark-bg);
+        padding: 20px;
+        border-radius: 15px;
+        margin-top: 10px;
+        border: 1px solid var(--glass-border);
+    }
+}
+@media (max-width: 425px) {
+    .container-fluid{
+        padding: 0px;
+    }
+    .brand{
+        font-size: 1.2rem;
+    }
+    nav{
+        padding: 10px 5px;
+    }
+    nav svg{
+        width: 30px;
+        height: 30px;
+        margin-right: 0px !important;
+    }
+    .btn-cart{
+        font-size: 1rem;
+        margin-right: 0 !important;
+    }
 }
