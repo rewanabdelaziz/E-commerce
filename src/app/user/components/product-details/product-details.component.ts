@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { ProductsService } from '../../services/products.service';
-import { ActivatedRoute, Router} from '@angular/router';
+import { ActivatedRoute, Router, RouterLink} from '@angular/router';
 import { Product } from '../../../core/models/product';
 import { DecimalPipe, NgClass, NgIf } from '@angular/common';
 import { UserCartService } from '../../services/userCart.service';
@@ -8,7 +8,7 @@ import { UserCartService } from '../../services/userCart.service';
 @Component({
   selector: 'app-product-details',
   standalone: true,
-  imports: [DecimalPipe,NgClass],
+  imports: [DecimalPipe,NgClass,RouterLink],
   templateUrl: './product-details.component.html',
   styleUrls: ['./product-details.component.css']
 })
