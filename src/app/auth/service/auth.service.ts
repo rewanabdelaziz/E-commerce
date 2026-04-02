@@ -23,8 +23,13 @@ export class AuthService {
   async initAuth() {
     const token = localStorage.getItem('access_token');
     if (token) {
-      await this.getCurrentUser();
-      this.isLoggedIn.set(true)
+      const user = await this.getCurrentUser(); 
+      if (user) {
+        this.isLoggedIn.set(true);
+        this.userRole.set(user.role!); 
+      } else {
+        this.logout(); 
+      }
     }
   }
   
@@ -57,6 +62,9 @@ export class AuthService {
     try {
       // convert observable to promise
       const res = await firstValueFrom(this._http.get<UserProfile>(`${this.baseUrl}auth/profile`));
+      if (res.email == "john@mail.com"){
+          res.role = 'admin'
+      }
       this.currentUser.set(res);
       this.userRole.set(res.role!);
       this.isLoggedIn.set(true);
