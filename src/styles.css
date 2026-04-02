@@ -53,3 +53,11 @@ body {
   transform: translateY(-8px);
   box-shadow: 0 10px 20px rgba(108, 99, 255, 0.2) !important;
 }
+
+button:disabled{
+  background-color: #333 !important; 
+  border-color: #444 !important;     
+  color: #777 !important;           
+  opacity: 0.6;                     
+  cursor: not-allowed;               
+}
