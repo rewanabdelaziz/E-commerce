@@ -62,9 +62,9 @@ export class AuthService {
     try {
       // convert observable to promise
       const res = await firstValueFrom(this._http.get<UserProfile>(`${this.baseUrl}auth/profile`));
-      if (res.email == "john@mail.com"){
-          res.role = 'admin'
-      }
+      // if (res.email == "john@mail.com"){
+      //     res.role = 'admin'
+      // }
       this.currentUser.set(res);
       this.userRole.set(res.role!);
       this.isLoggedIn.set(true);
