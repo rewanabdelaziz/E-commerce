@@ -1,119 +1,175 @@
-<div class="cartBox container mx-auto mt-5" >
-  <h1 class="text-danger">Our Products</h1>
-  <div class="headCart">
-    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#AddNewProductModal">
-      Add new product
+<div class="admin-page-header p-3 p-md-4">
+  <!-- header -->
+  <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-3">
+    <div>
+      <h2 class="text-white fw-bold h3 mb-1">Product Management</h2>
+      <p class="muted small mb-0">Manage your product catalog and inventory</p>
+    </div>
+     <!-- <p class="bg-success p-2 m-2 text-light">{{msg()}}</p> -->
+    <button class="btn btn-purple-glow w-sm-auto" (click)="openModal('add')">
+      <i class="fa-solid fa-plus me-2"></i> Add Product
     </button>
   </div>
+</div>
+
+<div class="table-container glass-effect rounded-4 overflow-hidden mb-4 mx-2 mx-md-4">
+  <!-- search bar -->
+  <div class="table-toolbar p-3 border-bottom border-secondary d-flex flex-wrap gap-3">
+    <div class="search-bar flex-grow-1">
+      <div class="input-group">
+        <span class="input-group-text bg-transparent border-secondary muted">
+          <i class="fa-solid fa-search"></i>
+        </span>
+        <input type="text" class="form-control bg-transparent border-secondary text-white" placeholder="Search products..." (input)="filterByTitle($event)">
+      </div>
+    </div>
+  </div>
+
+  <!-- table of products -->
   <div class="table-responsive">
-    <table class="table table-striped">
-    <thead class="text-center">
-      <tr>
-        <th></th>
-        <th>Name</th>
-        <th>Category</th>
-        <th>price</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-      @for(product of products;track product.id){
+    <table class="table admin-table mb-0">
+      <thead class="text-uppercase muted small">
         <tr>
-        <td><img [src]="product.images[0]" alt="product's image" style="width: 80px; height: auto;" class="img-fluid"></td>
-        <td>{{product.title | slice: 0:50}}</td>
-        <td>{{product.category}}</td>
-        <td>{{product.price}} L.E</td>
-        <td><button type="button" data-bs-toggle="modal" data-bs-target="#UpdateProductModal" class="btn btn-primary" (click)="update(product)">update</button></td>
-      </tr>
+          <th>ID</th>
+          <th>Image</th>
+          <th>Product Title</th>
+          <th>Price</th>
+          <th>Category</th>
+          <th class="text-end">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="text-white">
+        @for(product of products();track product.id){
+        <tr>
+          <td class="small muted">{{product.id}}</td>
+          <td>
+            <img [src]="product.images[0]" class="rounded-3 border border-secondary" width="50" height="50">
+          </td>
+          <td>
+            <div class="text-truncate text-light" style="max-width: 200px;"> {{product.title}} </div>
+          </td>
+          <td class="fw-bold text-purple">${{product.price | number:'1.2-2'}}</td>
+          <td>
+            <span class="badge category-badge">{{product.category.name}}</span>
+          </td>
+          <td class="text-end">
+            <div class="d-flex justify-content-end gap-2">
+              <button class="btn-action edit" (click)="openModal('edit', product)">
+                <i class="fa-solid fa-pencil"></i>
+              </button>
+              <button class="btn-action delete" (click)="delete(product.id)">
+                <i class="fa-solid fa-trash-can"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
       }
-
-    </tbody>
+      </tbody>
     </table>
-  </div>
-
+    @if(loadMore() && !isSearching()){
+      <div class="d-flex justify-content-center my-4">
+        <button class="btn btn-purple-glow w-sm-auto" (click)="loadMoreProducts()">
+          <i class="fa-solid fa-arrow-down me-2"></i> Load More
+        </button>
+      </div>
+    }@else if(!loadMore() && products.length > 0){
+      <div class="d-flex justify-content-center my-4">
+        <span class="text-secondary">No more products to load.</span>
+      </div>
+    }
 </div>
 
-<!-- Add new product Modal -->
-<div class="modal fade" id="AddNewProductModal" tabindex="-1" aria-labelledby="AddNewProductModalLabel" aria-hidden="true">
-  <div class="modal-dialog" style="max-width: 900px !important;">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="AddNewProductModalLabel">Add product</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+<!-- Modal -->
+@if(showModal){
+<div class="modal-overlay" (click)="closeModal()">
+  <div class="modal-card glass-effect shadow-lg animate__animated animate__fadeInDown" (click)="$event.stopPropagation()">
+    <div class="modal-header-custom d-flex justify-content-between align-items-center mb-1 p-3 pb-0">
+      <h5 class="text-white fw-bold mb-0"> {{ modalMode() === 'add' ? 'Add Product' : 'Edit Product' }} </h5>
+      <button class="btn-close-custom" (click)="closeModal()">&times;</button>
+    </div>
+    <p class="muted small px-3 mb-4">Fill in the details and preview your product in real-time</p>
+    @if(msg()){
+      <div class="alert alert-danger mx-3 mb-4" role="alert">
+        {{msg()}}
       </div>
-      <div class="modal-body">
-        <form [formGroup]="ProductForm" (ngSubmit)="AddProduct()">
-          <div class="row">
-            <div class="col-md-4 col-sm-12">
-              <label for="title">Title</label>
-              <input type="text" formControlName="title" id="title" class="form-control">
-            </div>
-            <div class="col-md-4 col-sm-12">
-              <label for="price">Price</label>
-              <input type="text" formControlName="price" id="price" class="form-control">
-            </div>
-            <!-- <div class="col-md-4 col-sm-12">
-              <app-select [SelectTitle]="'Categories'" [Allcategories]="Allcategories" [All]="false" (onChangeSelect)="getSelectedCategory($event)"></app-select>
-            </div> -->
-            <div class="col-md-4 col-sm-12">
-              <label for="image">Image</label>
-              <img src="{{base64}}" alt="" width="200" height="200" class="img-fluid">
-              <input type="file" id="image" class="form-control" (change)="getImagePath($event)">
-            </div>
-            <div class="col-md-8 col-sm-12">
-              <label for="description">description</label>
-              <textarea formControlName="description" id="description" class="form-control" placeholder="type here ...."></textarea>
-            </div>
+    }
+
+    <div class="modal-body-content overflow-auto p-3 pt-0" style="max-height: 75vh;">
+      <form [formGroup]="ProductForm" (ngSubmit)="modalMode() === 'add' ? AddProduct() : UpdateProduct()">
+      <div class="row g-4">
+        <div class="col-lg-6">
+          <div class="form-group mb-3">
+            <label class="form-label muted small">Product Title</label>
+            <input type="text" class="form-control admin-input" formControlName="title" placeholder="title of the product">
           </div>
-          <div class="d-flex justify-content-end mt-3">
-            <button class="btn btn-success" type="submit" [disabled]="ProductForm.invalid">Add Product</button>
+          <div class="form-group mb-3">
+            <label class="form-label muted small">Price ($)</label>
+            <input type="number" class="form-control admin-input" formControlName="price" placeholder="0.00" min="0" step="10">
           </div>
-        </form>
-        <p class="bg-success p-2 m-2 text-light" *ngIf="msg">{{msg}}</p>
+          <div class="form-group mb-3">
+            <label class="form-label muted small">Description</label>
+            <textarea class="form-control admin-input" formControlName="description" rows="3" placeholder="description of the product"></textarea>
+          </div>
+          <div class="form-group mb-3">
+            <label class="form-label muted small">Category</label>
+            <!-- <select class="form-select admin-input" formControlName="category" (change)="getSelectedCategory($event)"> -->
+            <select class="form-select admin-input" formControlName="category">
+              <option [value]="null" disabled>Select a category</option>
+              @for(category of Allcategories;track category.id){
+                <option [value]="category.id">{{category.name}}</option>
+              }
+            </select>
+          </div>
+          <div class="form-group mb-4">
+            <label class="form-label muted small">Image URL</label>
+            <img [src]="base64" alt="" width="200" height="200" class="img-fluid">
+            <input type="file" id="image" class="form-control admin-input" (change)="getImagePath($event)">
+            <!-- <input type="text" class="form-control admin-input" value="https://placeholder.co/600x400"> -->
+          </div>
+          
+          <div class="d-flex flex-column flex-sm-row gap-3">
+            <button class="btn btn-purple-glow flex-grow-1" type="submit" [disabled]="ProductForm.invalid"> {{ modalMode() === 'add' ? 'Create Product' : 'Update Product' }} </button>
+            <button class="btn btn-outline-secondary text-white flex-grow-1" type="button" (click)="closeModal()">Cancel</button>
+          </div>
+        </div>
+
+        <div class="col-lg-6 d-none d-lg-block">
+          <div class="preview-sticky">
+            <h6 class="text-white mb-3 fw-bold">Live Preview</h6>
+            <div class="customer-card-preview rounded-4 overflow-hidden shadow-lg border border-secondary">
+              <div class="position-relative">
+                <img [src]="base64" class="w-100 img-preview">
+                <span class="badge position-absolute top-0 start-0 m-2 bg-purple-tag">Preview</span>
+              </div>
+              <div class="p-3">
+                <small class="muted">CatID:{{ProductForm.get('category')?.value}}</small>
+                <h6 class="text-white fw-bold my-1 text-truncate"> {{ProductForm.get('title')?.value}} </h6>
+                <!-- <div class="stars text-warning small mb-3"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i> <small class="text-muted ms-1">(0)</small></div> -->
+                <div class="d-flex justify-content-between align-items-center">
+                  <span class="fs-5 fw-bold text-white">${{ProductForm.get('price')?.value || 0 | number:'1.2-2'}}</span>
+                  <!-- <button class="btn btn-purple-sm">Add to Cart</button> -->
+                </div>
+              </div>
+            </div>
+            <p class="text-center muted small mt-3">This is how customers will see your product</p>
+          </div>
+        </div>
       </div>
+      </form>
     </div>
   </div>
 </div>
+}
 
-<!-- update product Modal -->
-<div class="modal fade" id="UpdateProductModal" tabindex="-1" aria-labelledby="UpdateProductModalLabel" aria-hidden="true">
-  <div class="modal-dialog" style="max-width: 900px !important;">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="UpdateProductModalLabel">update product</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <form [formGroup]="ProductForm" (ngSubmit)="UpdateProduct()">
-          <div class="row">
-            <div class="col-md-4 col-sm-12">
-              <label for="title">Title</label>
-              <input type="text" formControlName="title" id="title" class="form-control">
-            </div>
-            <div class="col-md-4 col-sm-12">
-              <label for="price">Price</label>
-              <input type="text" formControlName="price" id="price" class="form-control">
-            </div>
-            <!-- <div class="col-md-4 col-sm-12">
-              <app-select [SelectTitle]="'Categories'" [Allcategories]="Allcategories" [All]="false" [SelectValue]="ProductForm.value.category" (onChangeSelect)="getSelectedCategory($event)"></app-select>
-            </div> -->
-            <div class="col-md-4 col-sm-12">
-              <label for="image">Image</label>
-              <img src="{{base64}}" alt="" width="200" height="200" class="img-fluid">
-              <input type="file" id="image" class="form-control" (change)="getImagePath($event)">
-            </div>
-            <div class="col-md-8 col-sm-12">
-              <label for="description">description</label>
-              <textarea formControlName="description" id="description" class="form-control" placeholder="type here ...."></textarea>
-            </div>
-          </div>
-          <div class="d-flex justify-content-end mt-3">
-            <button class="btn btn-success" type="submit" [disabled]="ProductForm.invalid">update Product</button>
-          </div>
-        </form>
-        <p class="bg-success p-2 m-2 text-light" *ngIf="msg">{{msg}}</p>
-      </div>
-    </div>
-  </div>
-</div>
+
+
+
+
+
+
+
+
+
+
+
 

@@ -1,3 +1,79 @@
-<app-header></app-header>
-<router-outlet></router-outlet>
+<div class="d-flex vh-100 admin-wrapper" style="overflow: hidden;">
+  
+  <button
+    class="btn btn-purple-glow d-md-none position-fixed top-0 start-0 m-3 z-3 shadow"
+    (click)="toggleSidebar()">
+    <i class="fa-solid" [class]="isSidebarOpen ? 'fa-xmark' : 'fa-bars-staggered'"></i>
+  </button>
+
+  @if (isSidebarOpen) {
+    <div class="sidebar-overlay d-md-none" (click)="isSidebarOpen = false"></div>
+  }
+
+  <aside class="sidebar glass-effect d-flex flex-column" [class.open]="isSidebarOpen">
+
+    <div class="sidebar-header mb-4">
+      <h3 class="brand-text mb-0">Elite<span>Commerce</span></h3>
+      <small class="muted">Admin Dashboard</small>
+    </div>
+
+    <ul class="nav nav-pills flex-column gap-2 flex-grow-1">
+      <!-- <li class="nav-item">
+        <a class="nav-link" routerLink="/admin/dashboard" routerLinkActive="active" (click)="isSidebarOpen = false">
+          <i class="fa-solid fa-gauge-high me-2"></i> Dashboard
+        </a>
+      </li> -->
+
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/admin/products" routerLinkActive="active" (click)="isSidebarOpen = false">
+          <i class="fa-solid fa-box-open me-2"></i> Products
+        </a>
+      </li>
+
+      <!-- <li class="nav-item">
+        <a class="nav-link" routerLink="/admin/categories" routerLinkActive="active" (click)="isSidebarOpen = false">
+          <i class="fa-solid fa-list-check me-2"></i> Categories
+        </a>
+      </li> -->
+
+      <!-- <li class="nav-item">
+        <a class="nav-link" routerLink="/admin/usersManagements" routerLinkActive="active" (click)="isSidebarOpen = false">
+          <i class="fa-solid fa-users-gear me-2"></i> Users
+        </a>
+      </li> -->
+    </ul>
+
+    <div class="mt-auto pt-4 border-top border-secondary">
+      <div class="d-flex align-items-center gap-3 p-2 rounded-3 bg-dark-soft">
+        @if(_auth.currentUser()?.avatar){
+          <img [src]="_auth.currentUser()?.avatar" class="rounded-circle border border-2 border-purple" style="width: 40px; height: 40px;">
+        }@else {
+          <div class="avatar-circle">
+            {{ _auth.currentUser()?.name?.charAt(0) }}
+          </div>
+        }
+      
+        <div class="user-info overflow-hidden">
+          <strong class="text-white d-block text-truncate">{{_auth.currentUser()?.name}}</strong>
+          <div class="muted small text-truncate">{{_auth.currentUser()?.email}}</div>
+        </div>
+      </div>
+
+      <div class="d-flex flex-column gap-1 mt-3">
+        <!-- <a routerLink="/user/home" class="btn btn-outline-light btn-sm text-start border-0">
+          <i class="fa-solid fa-house me-2"></i> Back to Store
+        </a> -->
+        <button class="btn btn-link text-danger text-start p-2 text-decoration-none" (click)="_auth.logout()">
+          <i class="fa-solid fa-right-from-bracket me-2"></i> Logout
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <main class="flex-fill content-area" style="overflow-y: auto;">
+    <div class="container-fluid py-4 px-3 px-md-5">
+      <router-outlet></router-outlet>
+    </div>
+  </main>
+</div>
 <app-spinner></app-spinner>

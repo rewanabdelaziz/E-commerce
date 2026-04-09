@@ -65,7 +65,7 @@ export class ProductsService {
   }
 
 
-  filterProductsByCategoryAndPrice(categoryId: number | null, minPrice: number = 0, maxPrice: number = 2000, offset: number ): Observable<Product[]> {
+  filterProductsByCategoryAndPrice(categoryId: number | null, minPrice: number = 0, maxPrice: number = 2000, offset: number ,title?:string | ''): Observable<Product[]> {
     let params = new HttpParams()
       .set('price_min', minPrice.toString())
       .set('price_max', maxPrice.toString())
@@ -74,6 +74,9 @@ export class ProductsService {
 
     if (categoryId !== null) {
       params = params.set('categoryId', categoryId.toString());
+    }
+    if (title) {
+      params = params.set('title', title);
     }
     return this._http.get<Product[]>(`${this.baseurl}products`, { params });
   }

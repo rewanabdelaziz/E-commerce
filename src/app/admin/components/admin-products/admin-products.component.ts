@@ -1,47 +1,104 @@
-// import { Iproduct } from '../../../core/models/iproduct';
-import { SelectComponent } from './../../../shared/components/select/select.component';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, signal } from '@angular/core';
 import { ProductsService } from '../../../user/services/products.service';
-import { NgIf, SlicePipe } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { DecimalPipe, } from '@angular/common';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AdminProductsService } from '../../services/admin-products.service';
 import { Category } from '../../../core/models/category';
-import { Product } from '../../../core/models/product';
+import { Product, ProductPayload } from '../../../core/models/product';
+import { debounceTime, distinctUntilChanged, Subject, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-admin-products',
   standalone: true,
-  imports: [SlicePipe,ReactiveFormsModule,NgIf],
+  imports: [ReactiveFormsModule,DecimalPipe,FormsModule],
   templateUrl: './admin-products.component.html',
   styleUrl: './admin-products.component.css'
 })
-export class AdminProductsComponent implements OnInit{
-  products:Product[] = [] as Product[];
+export class AdminProductsComponent implements OnInit,OnDestroy{
+
+  products = signal<Product[]>([]);
   Allcategories: Category[] = [];
-  msg="";
-  base64:any=[];
   currentProduct:Product = {} as Product
   ProductForm!:FormGroup;
+  selectedFile: File | null = null;
+  base64:any=[];
+  msg=signal('');
+  modalMode = signal(''); 
+  imageUrl = signal('');
+  offset = signal(0);
+  loadMore = signal(false);
+  isSearching = signal(false);
+  showModal = false;
+  searchTerm = new Subject<string>();
 
-  constructor(private _productService : ProductsService,private _fb:FormBuilder, private _AdminProductsService: AdminProductsService){
+  constructor(private _productService : ProductsService,
+              private _fb:FormBuilder, 
+              private _AdminProductsService: AdminProductsService,
+              private _userProductsService: ProductsService){}
 
-  }
+  
+
   ngOnInit(): void {
     this.ProductForm=this._fb.group({
       title:['',Validators.required],
       price:['',Validators.required],
       description:['',Validators.required],
       image:['',Validators.required],
-      category:['',Validators.required],
+      category:[null,Validators.required],
     })
+
     this.getAllProducts()
     this.getAllcats()
+
+    this.searchTerm.pipe(
+      debounceTime(500),
+      distinctUntilChanged(),
+      switchMap( (term) => {
+        if (term.trim() === '') {
+          this.resetPagination();
+          return this._productService.filterProductsByCategoryAndPrice(null, 0, 2000, 0);
+        }
+        return this._AdminProductsService.searchProductsByTitle(term);
+      })
+    ).subscribe(res => {
+      this.products .set(res);
+      this.loadMore.set(!this.isSearching() && res.length >= 9);
+    });
+
+  }
+
+  openModal(mode:string,product?:Product){
+    if (mode === 'edit' && product) {
+      this.showModal = true; 
+      this.modalMode.set('edit');
+      this.update(product);  
+    } else {
+      this.showModal = true; 
+      this.modalMode.set('add');
+      this.ProductForm.reset();
+      this.base64 = '';
+      this.currentProduct = {} as Product;
+    }
+  }
+
+  closeModal(){
+    this.showModal = false;
+    this.ProductForm.reset(); 
+    this.selectedFile = null;
+    this.modalMode.set('');
+    this.base64 = '';
+    this.currentProduct = {} as Product;
   }
 
   getAllProducts(){
-    this._productService.filterProductsByCategoryAndPrice(null, 0, 2000, 0).subscribe({
+    this._productService.filterProductsByCategoryAndPrice(null, 0, 2000, this.offset()).subscribe({
       next: (res)=>{
-        this.products=res
+        this.products.set([...this.products(), ...res]);
+        if(res.length < 9){
+          this.loadMore.set(false)
+        } else {
+          this.loadMore.set(true)
+        }
       },
       error: (err)=>{
         console.log(err)
@@ -50,7 +107,7 @@ export class AdminProductsComponent implements OnInit{
   }
 
   getAllcats(){
-    this._productService.getAllCategories().subscribe({
+    this._productService.getAllCategories(5).subscribe({
     next: (res) =>{
       this.Allcategories = (res as Category[]) || []
     },
@@ -60,34 +117,63 @@ export class AdminProductsComponent implements OnInit{
   })
   }
 
-  getSelectedCategory(event:any){
-    this.ProductForm.get('category')?.setValue(event.target.value)
+
+  getImagePath(event: any){
+    const file = event.target.files[0];
+    if (!file) return;
+    this.selectedFile = file;
+    const reader = new FileReader();
+    reader.readAsDataURL(file); 
+    reader.onload = (e: any) => {
+      this.base64 = e.target.result;
+      this.ProductForm.get('image')?.setValue(this.base64);
+    };
   }
 
-  getImagePath(event:any){
-    const file = event.target.files[0];
-    const reader= new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload =() => {
-      this.base64 = reader.result;
-      this.ProductForm.get('image')?.setValue(this.base64)
-    }
-  }
+
   AddProduct(){
-    let product:Product=this.ProductForm.value
-    // this._AdminProductsService.AddNewProduct(product).subscribe({
-    //   next: ()=>{
-    //     this.products.push(product)
-    //     this.msg="Product Added successfully";
-    //     setTimeout(()=>{
-    //     this.msg=''
-    //     },1500)
-    //   },
-    //   error:(err)=>{
-    //     console.log(err)
-    //   }
-    // })
-    // console.log(this.AddProductForm.value)
+    this._AdminProductsService.uploadImage(this.selectedFile!).subscribe({
+      next: (res)=>{
+        this.imageUrl.set(res.location);
+        const product:ProductPayload={
+          title: this.ProductForm.value.title,
+          price: this.ProductForm.value.price,
+          description: this.ProductForm.value.description,  
+          images: [this.imageUrl()],
+          categoryId: this.ProductForm.value.category,
+        }
+
+        // console.log("product to add", product);
+        this._AdminProductsService.addNewProduct(product).subscribe({
+          next: ()=>{
+            // this.products.push(product)
+            this.msg.set("Product Added successfully");
+            this.selectedFile = null;
+            this.resetPagination();
+            this.getAllProducts();
+            this.closeModal();  
+            setTimeout(()=>{
+            this.msg.set('')
+            },1500)
+          },
+          error:(err)=>{
+            console.log(err)
+    
+            if (err.error?.message?.includes('slug')) {
+              this.msg.set("This product title already exists. Please choose a unique title.");
+            }else if(err.status === 413){
+              this.msg.set(err.error.message || 'The uploaded image is too large. Please choose a smaller file.')
+            } else {
+              this.msg.set("An error occurred. Please try again.");
+            }
+          }
+        })
+      },
+      error: (err)=>{
+        console.log(err)
+        this.msg.set('An error occurred while uploading the image. Please try again.')
+      }
+    })
   }
 
   update(product:Product){
@@ -96,31 +182,107 @@ export class AdminProductsComponent implements OnInit{
       price: product.price,
       description: product.description,
       image: product.images[0],
-      category: product.category,
+      category: product.category.id,
     })
     this.base64=product.images[0]
     this.currentProduct=product
 
   }
-
+  
+  
   UpdateProduct(){
-    if(this.currentProduct){
-      let currentIndex =this.products.findIndex((prd) => prd.id === this.currentProduct.id)
-      let newValues = this.ProductForm.value
-      this.products.splice(currentIndex,1,newValues)
-      this.msg="Product updated successfully";
-      setTimeout(()=>{
-        this.msg=''
-      },1500)
-      this.ProductForm.patchValue({
-      title: '',
-      price: '',
-      description: '',
-      image: '',
-      category: '',
-    })
-    this.base64=''
+    if(this.selectedFile){
+      this._AdminProductsService.uploadImage(this.selectedFile!).subscribe({
+      next: (res)=>{
+        this.imageUrl.set(res.location);
+        this.saveUpdatedProduct()
+
+      },
+      error: (err)=>{
+        console.log(err)
+        this.msg.set('An error occurred while uploading the image. Please try again.')
+      }
+      })
+    } else {
+      this.imageUrl.set(this.currentProduct.images[0])
+      this.saveUpdatedProduct()
     }
+  }
+
+  saveUpdatedProduct(){
+        const product:Product={
+          ...this.currentProduct,
+          title: this.ProductForm.value.title,
+          price: this.ProductForm.value.price,
+          description: this.ProductForm.value.description,  
+          images: [this.imageUrl()],
+          category: this.Allcategories.find(cat => cat.id === this.ProductForm.value.category)!,
+          id: this.currentProduct.id
+        }
+
+        // console.log("product to edit", product);
+        this._AdminProductsService.editProduct(this.currentProduct.id, product).subscribe({
+          next: ()=>{
+            // this.products.push(product)
+            this.msg.set("Product Updated successfully");
+            this.resetPagination();
+            this.getAllProducts();
+            this.closeModal();  
+            setTimeout(()=>{
+            this.msg.set('')
+            },1500)
+          },
+          error:(err)=>{
+            console.log(err)
+    
+            if(err.status === 400){
+              this.msg.set(err.error.message || 'An error occurred while adding the product. Please try again.')
+            }else if(err.status === 413){
+              this.msg.set(err.error.message || 'The uploaded image is too large. Please choose a smaller file.')
+            }
+          }
+        })
+  }
+
+  delete(id:number){
+    this._AdminProductsService.deleteProduct(id).subscribe({
+      next:()=>{
+        this.msg.set("Product deleted successfully");
+        this.resetPagination();
+        this.getAllProducts();
+        setTimeout(()=>{
+          this.msg.set('')
+        },1500)
+      },
+      error:(err)=>{
+        console.log(err)
+      }
+    })
+  }
+  
+  filterByTitle(e:any){
+    this.resetPagination();
+    const title = (e.target as HTMLInputElement).value;
+    this.searchTerm.next(title);
+    this.isSearching.set(title.trim() !== '');
 
   }
+
+  resetPagination() {
+    this.offset.set(0);
+    this.products .set([]);
+    this.loadMore.set(false);
+  }
+
+  loadMoreProducts(){
+    this.offset.update(value => value + 9);
+    this.getAllProducts();
+  }
+
+  ngOnDestroy(): void {
+    this.searchTerm.complete();
+  }
+
+
+
 }

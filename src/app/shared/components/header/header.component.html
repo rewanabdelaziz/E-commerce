@@ -43,15 +43,20 @@
 
     <div class="collapse navbar-collapse order-lg-2" id="navbarText">
       <ul class="navbar-nav mx-auto mb-2 mb-lg-0 text-center">
-        @if(role()=='admin'){
-          <li class="nav-item mx-lg-3"><a class="nav-link" routerLink="/admin/products" routerLinkActive="active">Dashboard</a></li>
+        <!-- @if(role()=='admin'){
+          <li class="nav-item mx-lg-3"><a class="nav-link" routerLink="/admin/dashboard" routerLinkActive="active">Dashboard</a></li>
           <li class="nav-item mx-lg-3"><a class="nav-link" routerLink="/admin/products" routerLinkActive="active">Inventory</a></li>
-          <li class="nav-item mx-lg-3"><a class="nav-link" routerLink="/admin/cart" routerLinkActive="active">Analytics</a></li>
+          <li class="nav-item mx-lg-3"><a class="nav-link" routerLink="/admin/categories" routerLinkActive="active">Categories Managements</a></li>
+          <li class="nav-item mx-lg-3"><a class="nav-link" routerLink="/admin/usersManagements" routerLinkActive="active">User Managements</a></li>
         } @else {
           <li class="nav-item mx-lg-3"><a class="nav-link" routerLink="/user/home" routerLinkActive="active">Home</a></li>
           <li class="nav-item mx-lg-3"><a class="nav-link" routerLink="/user/products" routerLinkActive="active">Shop</a></li>
           <li class="nav-item mx-lg-3"><a class="nav-link" routerLink="/user/about" routerLinkActive="active">About</a></li>
-        }
+        } -->
+
+        <li class="nav-item mx-lg-3"><a class="nav-link" routerLink="/user/home" routerLinkActive="active">Home</a></li>
+        <li class="nav-item mx-lg-3"><a class="nav-link" routerLink="/user/products" routerLinkActive="active">Shop</a></li>
+        <li class="nav-item mx-lg-3"><a class="nav-link" routerLink="/user/about" routerLinkActive="active">About</a></li>
         
         <li class="nav-item d-lg-none mt-3 border-top pt-3 border-secondary">
           @if(islogged()){

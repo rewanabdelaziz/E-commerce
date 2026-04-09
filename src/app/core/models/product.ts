@@ -16,7 +16,13 @@ export interface Product {
   creationAt: string;
   updatedAt: string
 }
-
+export interface ProductPayload {
+  title: string;
+  description: string;
+  price: number;
+  categoryId: number;
+  images: string[];
+}
 
 
 // export const mockProducts: Product[] = [
