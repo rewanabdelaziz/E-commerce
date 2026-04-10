@@ -61,20 +61,20 @@
   font-size: 0.75rem;
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
-/* تصغير ارتفاع الصورة ليتناسب مع العدد الكبير */
+
 .card-img-wrapper {
   height: 140px; 
   overflow: hidden;
 }
 
-/* تصغير الأيقونة والبادج */
+
 .category-icon-badge {
   width: 30px;
   height: 30px;
   font-size: 0.9rem;
 }
 
-/* أزرار أصغر مخصصة للـ Admin Grid */
+
 .edit-btn-sm {
   background: var(--main-purple);
   color: white;
@@ -98,14 +98,13 @@
   font-size: 0.8rem;
 }
 
-/* تحسين شكل النصوص الطويلة */
+
 .text-truncate {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-/* جعل الكروت متساوية الطول في الصف الواحد */
 .h-100 {
   display: flex;
   flex-direction: column;

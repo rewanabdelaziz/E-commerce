@@ -1,11 +1,8 @@
 import { Component, inject, signal } from '@angular/core';
-import { Product, ProductPayload } from '../../../core/models/product';
 import { Category } from '../../../core/models/category';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { debounceTime, distinctUntilChanged, Subject, switchMap } from 'rxjs';
 import { ProductsService } from '../../../user/services/products.service';
 import { AdminProductsService } from '../../services/admin-products.service';
-import { DecimalPipe } from '@angular/common';
 import { CategoryManagementsService } from '../../services/category-managements.service';
 
 @Component({
@@ -36,7 +33,7 @@ export class CategoryManagementsComponent {
               private _fb:FormBuilder, 
               private _AdminProductsService: AdminProductsService,
               private _userProductsService: ProductsService){
-                // this.categories.set(this._AdminCategoriesService.categories());
+ 
               }
 
   
@@ -133,7 +130,7 @@ export class CategoryManagementsComponent {
             },1500)
           },
           error:(err)=>{
-            console.log(err)
+            // console.log(err)
     
             if (err.error?.message?.includes('slug')) {
               this.msg.set("This category name already exists. Please choose a unique name.");
@@ -146,7 +143,7 @@ export class CategoryManagementsComponent {
         })
       },
       error: (err)=>{
-        console.log(err)
+        // console.log(err)
         this.msg.set('An error occurred while uploading the image. Please try again.')
       }
     })
@@ -174,7 +171,7 @@ export class CategoryManagementsComponent {
 
       },
       error: (err)=>{
-        console.log(err)
+        // console.log(err)
         this.msg.set('An error occurred while uploading the image. Please try again.')
       }
       })
@@ -203,7 +200,7 @@ export class CategoryManagementsComponent {
             },1500)
           },
           error:(err)=>{
-            console.log(err)
+            // console.log(err)
     
             if(err.status === 400){
               this.msg.set(err.error.message || 'An error occurred while adding the product. Please try again.')
@@ -228,7 +225,7 @@ export class CategoryManagementsComponent {
         if (err.status === 400 && err.error.code === 'SQLITE_CONSTRAINT_FOREIGNKEY') {
           this.deleteMsg.set('Cannot delete this category because it is associated with existing products. Please remove or reassign those products before deleting the category.');
         } else {
-          console.log(err);
+          // console.log(err);
           this.deleteMsg.set('An error occurred while deleting the category. Please try again.');
         }
       }
