@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, signal } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { ProductsService } from '../../../user/services/products.service';
 import { DecimalPipe, } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -6,6 +6,7 @@ import { AdminProductsService } from '../../services/admin-products.service';
 import { Category } from '../../../core/models/category';
 import { Product, ProductPayload } from '../../../core/models/product';
 import { debounceTime, distinctUntilChanged, Subject, switchMap } from 'rxjs';
+import { CategoryManagementsService } from '../../services/category-managements.service';
 
 @Component({
   selector: 'app-admin-products',
@@ -16,8 +17,10 @@ import { debounceTime, distinctUntilChanged, Subject, switchMap } from 'rxjs';
 })
 export class AdminProductsComponent implements OnInit,OnDestroy{
 
-  products = signal<Product[]>([]);
-  Allcategories: Category[] = [];
+  private _AdminProductsService = inject(AdminProductsService);
+  private _AdminCategoriesService = inject(CategoryManagementsService);
+  products = this._AdminProductsService.products;
+  Allcategories = this._AdminCategoriesService.categories().slice(0, 5);
   currentProduct:Product = {} as Product
   ProductForm!:FormGroup;
   selectedFile: File | null = null;
@@ -31,10 +34,10 @@ export class AdminProductsComponent implements OnInit,OnDestroy{
   showModal = false;
   searchTerm = new Subject<string>();
 
+
+
   constructor(private _productService : ProductsService,
-              private _fb:FormBuilder, 
-              private _AdminProductsService: AdminProductsService,
-              private _userProductsService: ProductsService){}
+              private _fb:FormBuilder){}
 
   
 
@@ -47,8 +50,6 @@ export class AdminProductsComponent implements OnInit,OnDestroy{
       category:[null,Validators.required],
     })
 
-    this.getAllProducts()
-    this.getAllcats()
 
     this.searchTerm.pipe(
       debounceTime(500),
@@ -64,6 +65,12 @@ export class AdminProductsComponent implements OnInit,OnDestroy{
       this.products .set(res);
       this.loadMore.set(!this.isSearching() && res.length >= 9);
     });
+
+    if(this.products().length < 9){
+        this.loadMore.set(false)
+      } else {
+        this.loadMore.set(true)
+    }
 
   }
 
@@ -106,16 +113,6 @@ export class AdminProductsComponent implements OnInit,OnDestroy{
     })
   }
 
-  getAllcats(){
-    this._productService.getAllCategories(5).subscribe({
-    next: (res) =>{
-      this.Allcategories = (res as Category[]) || []
-    },
-    error: (err) =>{
-      console.log(err)
-    }
-  })
-  }
 
 
   getImagePath(event: any){
