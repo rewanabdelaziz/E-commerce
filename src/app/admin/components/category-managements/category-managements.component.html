@@ -16,13 +16,13 @@
   </div>
 }
 <div class="container-fluid px-2 px-md-3 mb-5">
-  <div class="row g-3 row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 row-cols-xxl-6">
+  <div class="row g-3 row-cols-2 row-cols-sm-3 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 row-cols-xxl-6">
     @for(category of categories(); track category.id){
     <div class="col">
       <div class="category-card glass-effect rounded-3 overflow-hidden position-relative h-100">
         
         <div class="card-img-wrapper position-relative">
-          <img [src]="category.image" class="w-100 category-img" [alt]="category.name">
+          <img [src]="category.image" [appImageFallback]="category.name" class="w-100 category-img" [alt]="category.name">
           <div class="img-overlay"></div>
           <span class="category-icon-badge position-absolute top-0 start-0 m-2 rounded-2">
              <i class="fa-solid fa-folder-tree"></i>
@@ -78,7 +78,7 @@
           </div>
           <div class="form-group mb-4">
             <label class="form-label muted small">Image URL</label>
-            <img [src]="base64" alt="" width="200" height="200" class="img-fluid">
+            <img [src]="base64" alt="" width="200" height="200" class="img-fluid" appImageFallback>
             <input type="file" id="image" class="form-control admin-input" (change)="getImagePath($event)">
             <!-- <input type="text" class="form-control admin-input" value="https://placeholder.co/600x400"> -->
           </div>
@@ -94,17 +94,17 @@
             <h6 class="text-white mb-3 fw-bold">Live Preview</h6>
             <div class="customer-card-preview rounded-4 overflow-hidden shadow-lg border border-secondary">
               <div class="position-relative">
-                <img [src]="base64" class="w-100 img-preview">
+                <img [src]="base64" class="w-100 img-preview" appImageFallback>
                 <span class="badge position-absolute top-0 start-0 m-2 bg-purple-tag">Preview</span>
               </div>
               <div class="p-3">
-                <small class="muted">CatID:{{categoryForm.get('category')?.value}}</small>
+                <small class="muted">slug: {{categoryForm.get('slug')?.value}}</small>
                 <h6 class="text-white fw-bold my-1 text-truncate"> {{categoryForm.get('name')?.value}} </h6>
                 <!-- <div class="stars text-warning small mb-3"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i> <small class="text-muted ms-1">(0)</small></div> -->
-                <div class="d-flex justify-content-between align-items-center">
+                <!-- <div class="d-flex justify-content-between align-items-center">
                   <span class="fs-5 fw-bold text-white">${{categoryForm.get('id')?.value }}</span>
-                  <!-- <button class="btn btn-purple-sm">Add to Cart</button> -->
-                </div>
+                  <button class="btn btn-purple-sm">Add to Cart</button>
+                </div> -->
               </div>
             </div>
             <p class="text-center muted small mt-3">This is how customers will see your category</p>

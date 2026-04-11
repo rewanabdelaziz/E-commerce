@@ -1,20 +1,26 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { Category } from '../../../core/models/category';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ProductsService } from '../../../user/services/products.service';
 import { AdminProductsService } from '../../services/admin-products.service';
 import { CategoryManagementsService } from '../../services/category-managements.service';
+import { ImageFallbackDirective } from '../../../shared/directive/image-fallback.directive';
 
 @Component({
   selector: 'app-category-managements',
   standalone: true,
-  imports: [FormsModule,ReactiveFormsModule],
+  imports: [FormsModule,ReactiveFormsModule,ImageFallbackDirective],
   templateUrl: './category-managements.component.html',
   styleUrl: './category-managements.component.css'
 })
 export class CategoryManagementsComponent {
   private _AdminCategoriesService = inject(CategoryManagementsService);
-  categories = this._AdminCategoriesService.categories;
+  // categories = this._AdminCategoriesService.categories;
+  categories = computed(() => {
+    const all = this._AdminCategoriesService.categories();
+    if (all.length <= 10) return all; 
+    return [...all.slice(0, 6), ...all.slice(-6)];
+  });
   currentcategory:Category = {} as Category
   categoryForm!:FormGroup;
   selectedFile: File | null = null;
@@ -193,7 +199,9 @@ export class CategoryManagementsComponent {
           next: ()=>{
             this.msg.set("Category Updated successfully");
             // this.resetPagination();
-            this.categories.update(old => old.map(c => c.id === category.id ? category : c));
+            // this.categories.update(old => old.map(c => c.id === category.id ? category : c));
+            this._AdminCategoriesService.categories.update(old => old.map(c => c.id === category.id ? category : c));
+
             this.closeModal();  
             setTimeout(()=>{
             this.msg.set('')
@@ -216,7 +224,8 @@ export class CategoryManagementsComponent {
       next:()=>{
         this.deleteMsg.set("Category deleted successfully");
         // this.resetPagination();
-       this.categories.update(old => old.filter(c => c.id !== id));
+      //  this.categories.update(old => old.filter(c => c.id !== id));
+        this._AdminCategoriesService.categories.update(old => old.filter(c => c.id !== id));
         setTimeout(()=>{
           this.deleteMsg.set('')
         },1500)

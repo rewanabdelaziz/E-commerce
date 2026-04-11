@@ -7,11 +7,12 @@ import { Category } from '../../../core/models/category';
 import { Product, ProductPayload } from '../../../core/models/product';
 import { debounceTime, distinctUntilChanged, Subject, switchMap } from 'rxjs';
 import { CategoryManagementsService } from '../../services/category-managements.service';
+import { ImageFallbackDirective } from '../../../shared/directive/image-fallback.directive';
 
 @Component({
   selector: 'app-admin-products',
   standalone: true,
-  imports: [ReactiveFormsModule,DecimalPipe,FormsModule],
+  imports: [ReactiveFormsModule,DecimalPipe,FormsModule,ImageFallbackDirective],
   templateUrl: './admin-products.component.html',
   styleUrl: './admin-products.component.css'
 })
