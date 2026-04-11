@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { ProductsService } from '../../../user/services/products.service';
 import { DecimalPipe, } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -21,7 +21,11 @@ export class AdminProductsComponent implements OnInit,OnDestroy{
   private _AdminProductsService = inject(AdminProductsService);
   private _AdminCategoriesService = inject(CategoryManagementsService);
   products = this._AdminProductsService.products;
-  Allcategories = this._AdminCategoriesService.categories().slice(0, 5);
+  Allcategories = computed(() => {
+    const all = this._AdminCategoriesService.categories();
+    if (all.length <= 10) return all; 
+    return [...all.slice(0, 6)];
+  });
   currentProduct:Product = {} as Product
   ProductForm!:FormGroup;
   selectedFile: File | null = null;
@@ -214,7 +218,7 @@ export class AdminProductsComponent implements OnInit,OnDestroy{
           price: this.ProductForm.value.price,
           description: this.ProductForm.value.description,  
           images: [this.imageUrl()],
-          category: this.Allcategories.find(cat => cat.id === this.ProductForm.value.category)!,
+          category: this.Allcategories().find(cat => cat.id === this.ProductForm.value.category)!,
           id: this.currentProduct.id
         }
 

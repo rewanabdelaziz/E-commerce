@@ -115,7 +115,7 @@
             <!-- <select class="form-select admin-input" formControlName="category" (change)="getSelectedCategory($event)"> -->
             <select class="form-select admin-input" formControlName="category">
               <option [value]="null" disabled>Select a category</option>
-              @for(category of Allcategories;track category.id){
+              @for(category of Allcategories();track category.id){
                 <option [value]="category.id">{{category.name}}</option>
               }
             </select>
