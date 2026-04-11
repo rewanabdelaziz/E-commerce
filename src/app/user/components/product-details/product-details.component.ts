@@ -4,11 +4,12 @@ import { ActivatedRoute, Router, RouterLink} from '@angular/router';
 import { Product } from '../../../core/models/product';
 import { DecimalPipe, NgClass, NgIf } from '@angular/common';
 import { UserCartService } from '../../services/userCart.service';
+import { ImageFallbackDirective } from '../../../shared/directive/image-fallback.directive';
 
 @Component({
   selector: 'app-product-details',
   standalone: true,
-  imports: [DecimalPipe,NgClass,RouterLink],
+  imports: [DecimalPipe,NgClass,RouterLink,ImageFallbackDirective],
   templateUrl: './product-details.component.html',
   styleUrls: ['./product-details.component.css']
 })

@@ -13,13 +13,13 @@
     
     <div class="col-lg-6">
       <div class="main-image-container mb-3">
-        <img [src]="currentImage" alt="Main Product Image" class="img-fluid rounded-20 main-prd-img w-100">
+        <img [src]="currentImage" alt="Main Product Image" class="img-fluid rounded-20 main-prd-img w-100" [appImageFallback]="product()?.title ?? 'Elite Commerce'">
       </div>
       
       <div class="d-flex gap-3 thumbnail-gallery">
         @for(img of product()?.images; track img; let i = $index){
          <div class="thumb-img" (click)="selectimg(img)" [ngClass]="{'active': currentImage === img}">
-           <img [src]="img" [alt]="'Thumb ' + i">
+           <img [src]="img" [alt]="'Thumb ' + i"  [appImageFallback]="product()?.title + ' thumb ' + i">
          </div>
         }
         

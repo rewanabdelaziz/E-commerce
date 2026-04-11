@@ -9,11 +9,12 @@ import { UserCartService } from '../../services/userCart.service';
 import { NgxSliderModule } from '@angular-slider/ngx-slider';
 import { Options } from '@angular-slider/ngx-slider';
 import { AuthService } from '../../../auth/service/auth.service';
+import { ImageFallbackDirective } from '../../../shared/directive/image-fallback.directive';
 
 @Component({
   selector: 'app-all-products',
   standalone: true,
-  imports: [DecimalPipe,FormsModule,CommonModule,NgxSliderModule],
+  imports: [DecimalPipe,FormsModule,CommonModule,NgxSliderModule,ImageFallbackDirective],
   templateUrl: './all-products.component.html',
   styleUrls: ['./all-products.component.css']
 })

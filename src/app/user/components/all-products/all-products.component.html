@@ -65,7 +65,7 @@
             <div class="img-container">
               <!-- <span class="badge-discount">-25%</span>
               <span class="badge-new">New</span> -->
-              <img [src]="prd.images[0]" [alt]="prd.title">
+              <img [src]="prd.images[0]" [alt]="prd.title" [appImageFallback]="prd?.title ?? 'Elite Commerce'">
             </div>
             <div class="card-info p-3">
               <span class="cat-tag">{{prd.category.name}}</span>
