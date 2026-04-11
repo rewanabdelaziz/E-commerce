@@ -67,6 +67,11 @@
 .muted{
     color: var(--text-muted);
 }
+.mobile-nav-header{
+  background: var(--glass-card);
+  backdrop-filter: blur(15px);
+  border-bottom: 1px solid var(--glass-border);
+}
 @media (min-width: 768px) {
   .sidebar {
     transform: translateX(0);

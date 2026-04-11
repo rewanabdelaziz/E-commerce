@@ -1,10 +1,14 @@
 <div class="d-flex vh-100 admin-wrapper" style="overflow: hidden;">
+
+   
+  <div class="mobile-nav-header d-md-none fixed-top d-flex align-items-center px-3">
+   <button
+      class="btn btn-purple-glow  mx-3 my-2 shadow"
+      (click)="toggleSidebar()">
+      <i class="fa-solid" [class]="isSidebarOpen ? 'fa-xmark' : 'fa-bars-staggered'"></i>
+    </button>
   
-  <button
-    class="btn btn-purple-glow d-md-none position-fixed top-0 start-0 m-3 z-3 shadow"
-    (click)="toggleSidebar()">
-    <i class="fa-solid" [class]="isSidebarOpen ? 'fa-xmark' : 'fa-bars-staggered'"></i>
-  </button>
+  </div>
 
   @if (isSidebarOpen) {
     <div class="sidebar-overlay d-md-none" (click)="isSidebarOpen = false"></div>
