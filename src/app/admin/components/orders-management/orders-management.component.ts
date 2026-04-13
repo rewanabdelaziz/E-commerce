@@ -1,10 +1,10 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { OrdersService } from '../../../shared/services/orders.service';
-import { ToastrService } from 'ngx-toastr';
 import { FormsModule } from '@angular/forms';
 import { Status } from '../../../core/models/order';
- import Swal from 'sweetalert2'; 
+import Swal from 'sweetalert2'; 
+
 @Component({
   selector: 'app-orders-management',
   standalone: true,
@@ -12,14 +12,23 @@ import { Status } from '../../../core/models/order';
   templateUrl: './orders-management.component.html',
   styleUrl: './orders-management.component.css'
 })
-export class OrdersManagementComponent {
+export class OrdersManagementComponent implements OnInit {
   private _ordersService = inject(OrdersService);
-  private toastr = inject(ToastrService);
 
   orders = this._ordersService.allOrders;
   filterStatus = signal<string>('all');
   isLoading = this._ordersService.isLoading;
   statuses: Status[] = ['pending', 'shipped', 'delivered'];
+
+  private Toast = Swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 2500,
+    timerProgressBar: true,
+    background: '#1e293b',
+    color: '#fff'
+  });
 
   filteredOrders = computed(() => {
     const status = this.filterStatus();
@@ -30,7 +39,7 @@ export class OrdersManagementComponent {
   });
 
   ngOnInit() {
-    this.loadAllOrders();
+    // this.loadAllOrders();
   }
 
   async loadAllOrders() {
@@ -39,7 +48,13 @@ export class OrdersManagementComponent {
       const data = await this._ordersService.getOrders();
       this.orders.set(data); 
     } catch (error) {
-      this.toastr.error('Failed to load orders');
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Failed to load orders',
+        background: '#1e293b',
+        color: '#fff'
+      });
     } finally {
       this.isLoading.set(false);
     }
@@ -49,14 +64,13 @@ export class OrdersManagementComponent {
     this.filterStatus.set(status);
   }
 
-
   async deleteOrder(id: string) {
     Swal.fire({
       title: 'Are you sure?',
       text: "You won't be able to revert this!",
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#a855f7', 
+      confirmButtonColor: '#ef4444', 
       cancelButtonColor: '#6c757d',
       confirmButtonText: 'Yes, delete it!',
       background: '#1e293b', 
@@ -66,44 +80,41 @@ export class OrdersManagementComponent {
         try {
           await this._ordersService.deleteOrder(id);
           this.orders.update(all => all.filter(o => o.id !== id));
-          Swal.fire({
-            title: 'Deleted!',
-            text: 'Order has been deleted.',
+          this.Toast.fire({
             icon: 'success',
-            timer: 1500,
-            showConfirmButton: false,
+            title: 'Order deleted successfully'
+          });
+        } catch (error) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Delete failed',
+            text: 'Something went wrong while deleting the order.',
             background: '#1e293b',
             color: '#fff'
           });
-        } catch (error) {
-          this.toastr.error('Delete failed');
         }
       }
     });
   }
 
- async changeStatus(orderId: string, newStatus: any) {
-  try {
-    await this._ordersService.updateOrder(orderId, { status: newStatus });
-    
-    const Toast = Swal.mixin({
-      toast: true,
-      position: 'top-end',
-      showConfirmButton: false,
-      timer: 3000,
-      timerProgressBar: true,
-      background: '#1e293b',
-      color: '#fff'
-    });
+  async changeStatus(orderId: string, newStatus: any) {
+    try {
+      await this._ordersService.updateOrder(orderId, { status: newStatus });
+      
+      this.Toast.fire({
+        icon: 'success',
+        title: `Status updated to ${newStatus}`
+      });
 
-    Toast.fire({
-      icon: 'success',
-      title: `Status updated to ${newStatus}`
-    });
-
-    this.orders.update(all => all.map(o => o.id === orderId ? { ...o, status: newStatus } : o));
-  } catch (error) {
-    this.toastr.error('Update failed');
+      this.orders.update(all => all.map(o => o.id === orderId ? { ...o, status: newStatus } : o));
+    } catch (error) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Update failed',
+        text: 'Could not update order status.',
+        background: '#1e293b',
+        color: '#fff'
+      });
+    }
   }
-}
 }

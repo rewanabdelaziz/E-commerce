@@ -6,32 +6,41 @@ import { UserCartService } from '../../../user/services/userCart.service';
 import { DecimalPipe } from '@angular/common';
 import { Order } from '../../../core/models/order';
 import { OrdersService } from '../../services/orders.service';
-import { ToastrService } from 'ngx-toastr';
+import Swal from 'sweetalert2'; // استبدال Toastr بـ SweetAlert2
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [RouterLink, RouterLinkActive,DecimalPipe],
+  imports: [RouterLink, RouterLinkActive, DecimalPipe],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
 })
 export class HeaderComponent implements OnInit {
   private _auth = inject(AuthService)
   private _ordersService = inject(OrdersService)
-  toastr = inject(ToastrService);
-  
-  user = this._auth.currentUser 
+  private _cartService = inject(UserCartService)
+
+  user = this._auth.currentUser
   role = this._auth.userRole
   islogged = this._auth.isLoggedIn
 
   cartProducts = computed(() => this._cartService.cart())
-  total:number=0;
-  currentIndex:number=0;
-  success:boolean=false;
-  currentItem:IcartProduct={} as IcartProduct;
-  private _cartService = inject(UserCartService)
+  total: number = 0;
+  currentIndex: number = 0;
+  success: boolean = false;
+  currentItem: IcartProduct = {} as IcartProduct;
 
-  logout(){
+  private Toast = Swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 2500,
+    timerProgressBar: true,
+    background: '#1e293b',
+    color: '#fff'
+  });
+
+  logout() {
     this._auth.logout()
   }
 
@@ -39,111 +48,140 @@ export class HeaderComponent implements OnInit {
     this.getTotalPrice();
   }
 
-
-  getTotalPrice(){
-    this.total=0
-    for (let prd in this.cartProducts()){
+  getTotalPrice() {
+    this.total = 0
+    for (let prd in this.cartProducts()) {
       this.total += this.cartProducts()[prd].item.price * this.cartProducts()[prd].quantity
     }
   }
 
-  getProductbyId(id:number){
-    this.currentItem=this.cartProducts().find((prd:IcartProduct)=> prd.item.id === id)!
-    this.currentIndex=this.cartProducts().indexOf(this.currentItem)
+  getProductbyId(id: number) {
+    this.currentItem = this.cartProducts().find((prd: IcartProduct) => prd.item.id === id)!
+    this.currentIndex = this.cartProducts().indexOf(this.currentItem)
   }
 
-  setToLocalStorage(){
-    localStorage.setItem('cart',JSON.stringify(this.cartProducts()))
+  setToLocalStorage() {
+    localStorage.setItem('cart', JSON.stringify(this.cartProducts()))
   }
 
-  minusQauntity(id:number){
+  minusQauntity(id: number) {
     this.getProductbyId(id)
-    this.cartProducts()[this.currentIndex].quantity -= 1
-    this.setToLocalStorage()
-    this.getTotalPrice()
-    // console.log(this.currentItem);
+    if (this.cartProducts()[this.currentIndex].quantity > 1) {
+      this.cartProducts()[this.currentIndex].quantity -= 1
+      this.setToLocalStorage()
+      this.getTotalPrice()
+    } else {
+      this.deleteProduct(id); // لو الكمية هتبقى صفر، امسح المنتج أحسن
+    }
   }
 
-  plusQauntity(id:number){
+  plusQauntity(id: number) {
     this.getProductbyId(id)
     this.cartProducts()[this.currentIndex].quantity += 1
     this.setToLocalStorage()
     this.getTotalPrice()
   }
 
-  clearCart(){
-    this._cartService.cart.set([])
-    localStorage.removeItem('cart')
-    this.getTotalPrice()
+  clearCart() {
+    Swal.fire({
+      title: 'Empty Cart?',
+      text: "Are you sure you want to remove all items from your cart?",
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#a855f7',
+      cancelButtonColor: '#6c757d',
+      confirmButtonText: 'Yes, clear it!',
+      background: '#1e293b',
+      color: '#fff'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this._cartService.cart.set([])
+        localStorage.removeItem('cart')
+        this.getTotalPrice()
+        this.Toast.fire({ icon: 'success', title: 'Cart cleared' });
+      }
+    });
   }
 
-  detectQuantityChange(){
+  detectQuantityChange() {
     this.setToLocalStorage()
     this.getTotalPrice()
   }
 
-  deleteProduct(id:number){
+  deleteProduct(id: number) {
     this.getProductbyId(id)
     this._cartService.cart.update((cartProducts) => {
-      cartProducts.splice(this.currentIndex,1)
-      return cartProducts
+      cartProducts.splice(this.currentIndex, 1)
+      return [...cartProducts]; // Spread لضمان تحديث الـ Signal
     })
     this.setToLocalStorage()
     this.getTotalPrice()
+    this.Toast.fire({ icon: 'info', title: 'Product removed' });
   }
 
-  async checkout(){
+  async checkout() {
     let user = this._auth.currentUser()
-    if(user){
-      let orderData:Order = {
+    if (user) {
+      if (this.cartProducts().length === 0) {
+        this.Toast.fire({ icon: 'warning', title: 'Your cart is empty' });
+        return;
+      }
+
+      let orderData: Order = {
         customerName: user.name,
         email: user.email,
         userId: user.id!,
         items: this.cartProducts(),
         totalPrice: this.total,
         status: 'pending'
-
       }
-      this.toastr.info('Processing your order...', 'Checkout');
+
+      // إظهار حالة التحميل
+      Swal.fire({
+        title: 'Processing Order',
+        html: 'Please wait while we place your order...',
+        allowOutsideClick: false,
+        background: '#1e293b',
+        color: '#fff',
+        didOpen: () => {
+          Swal.showLoading()
+        }
+      });
+
       try {
         const orderId = await this._ordersService.newOrder(orderData);
-        this.toastr.success('Your order has been placed successfully!', 'Success');
-        console.log('Order placed successfully with ID:', orderId);
+        Swal.close();
+        
+        Swal.fire({
+          icon: 'success',
+          title: 'Order Placed!',
+          text: 'Your order has been placed successfully.',
+          timer: 3000,
+          showConfirmButton: false,
+          background: '#1e293b',
+          color: '#fff'
+        });
 
-        this.clearCart(); 
+        // تنظيف العربة بدون سؤال تأكيد هنا لأن الطلب تم فعلاً
+        this._cartService.cart.set([])
+        localStorage.removeItem('cart')
+        this.getTotalPrice()
+
       } catch (error) {
-        this.toastr.error('There was an error placing your order. Please try again.', 'Error');
+        Swal.fire({
+          icon: 'error',
+          title: 'Checkout Failed',
+          text: 'There was an error placing your order. Please try again.',
+          background: '#1e293b',
+          color: '#fff'
+        });
         console.error('Error placing order:', error);
       }
-    }else{
-      this.toastr.warning('Please log in to proceed with checkout.', 'Not Logged In');
+    } else {
+      this.Toast.fire({
+        icon: 'warning',
+        title: 'Please log in to proceed'
+      });
     }
-
-
-}
-    
-  // addCart(){
-  //     let user = this._auth.currentUser()
-  //     let mapProducts=this.cartProducts().map((prd)=>{
-  //       return {productId:prd.item.id, quantity: prd.quantity}
-  //     })
-  //     let model:IcartModel ={
-  //       userId: (user?.id)? user?.id : 1,
-  //       date: new Date(),
-  //       products: mapProducts
-  //     }
-  //     this._cartService.createNewCart(model).subscribe({
-  //       next: ()=> {
-  //         this.success=true
-  //         this.clearCart()
-  //       },
-  //       error: (err)=> {
-  //         console.log(err)
-  //       }
-  //     })
-  //     // console.log(model)
-  // }
-
-
-
+  }
 }
