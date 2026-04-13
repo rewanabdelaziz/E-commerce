@@ -65,14 +65,14 @@
             <div class="img-container">
               <!-- <span class="badge-discount">-25%</span>
               <span class="badge-new">New</span> -->
-              <img [src]="prd.images[0]" [alt]="prd.title">
+              <img [src]="prd.images[0]" [alt]="prd.title" [appImageFallback]="prd?.title ?? 'Elite Commerce'">
             </div>
             <div class="card-info p-3">
               <span class="cat-tag">{{prd.category.name}}</span>
               <h6 class="mt-2 text-white">{{prd.title}}</h6>
               <div class="d-flex justify-content-between align-items-center mt-3">
                  <span class="price">${{prd.price | number:'1.2-2'}}</span>
-                 <button class="btn-add-cart" (click)="addToCart(prd)"><i class="fas fa-plus"></i></button>
+                 <button class="btn-add-cart" (click)="addToCart(prd, $event)"><i class="fas fa-plus"></i></button>
               </div>
             </div>
           </div>

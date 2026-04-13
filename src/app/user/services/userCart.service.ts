@@ -3,13 +3,14 @@ import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { IcartModel } from '../../core/models/IcartModel';
 import { Product } from '../../core/models/product';
+import { IcartProduct } from '../../core/models/IcartProduct';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserCartService {
   baseurl=environment.apiUrl
-  cart = signal<{item:Product,quantity:number}[]>([])
+  cart = signal<IcartProduct[]>([])
 
  constructor(private _httpclient: HttpClient) {
 

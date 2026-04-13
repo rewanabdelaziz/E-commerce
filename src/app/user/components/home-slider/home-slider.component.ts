@@ -3,12 +3,13 @@ import { ProductsService } from '../../services/products.service';
 import { Router } from '@angular/router';
 import { Product } from '../../../core/models/product';
 import { Category } from '../../../core/models/category';
+import { ImageFallbackDirective } from '../../../shared/directive/image-fallback.directive';
 
 
 @Component({
   selector: 'app-home-slider',
   standalone: true,
-  imports: [],
+  imports: [ImageFallbackDirective],
   templateUrl: './home-slider.component.html',
   styleUrl: './home-slider.component.css'
 })

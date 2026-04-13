@@ -1,0 +1,129 @@
+.muted { color: var(--text-muted); }
+/* Glassmorphism Effect */
+.glass-effect {
+  background: var(--glass-card);
+  backdrop-filter: blur(15px);
+  border: 1px solid var(--glass-border);
+}
+
+/* Page Header */
+.text-purple { color: #a5a1ff; }
+
+/* Table Styling */
+.table-container { box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3); }
+
+.admin-table thead th {
+  background: rgba(0, 0, 0, 0.2);
+  color: #94a3b8;
+  padding: 18px;
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.admin-table tbody td {
+  padding: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  vertical-align: middle;
+  background-color: transparent;
+}
+
+.category-badge {
+  background: rgba(108, 99, 255, 0.1);
+  color: #a5a1ff;
+  border: 1px solid rgba(108, 99, 255, 0.3);
+  padding: 5px 10px;
+  border-radius: 6px;
+}
+
+/* Buttons & Actions */
+.btn-purple-glow {
+  background: var(--main-purple);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(108, 99, 255, 0.3);
+  transition: all 0.3s ease;
+}
+.btn-purple-glow:hover {
+  filter: brightness(1.1);
+  transform: translateY(-2px);
+}
+
+.btn-action {
+  width: 35px; height: 35px;
+  border-radius: 8px;
+  border: none;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
+}
+.btn-action.edit { background: var(--main-purple); color: white; }
+
+input::placeholder, textarea::placeholder {
+  color: var(--text-muted);
+}
+
+.admin-input {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid var(--glass-border);
+  color: white;
+  border-radius: 10px;
+  padding: 12px;
+}
+.admin-input:focus {
+  background: rgba(15, 23, 42, 0.9);
+  border-color: var(--main-purple);
+  box-shadow: none; color: white;
+}
+
+.btn-close-custom {
+  background: none; border: none;
+  color: rgba(255,255,255,0.5); font-size: 2rem;
+  line-height: 1; transition: color 0.2s;
+}
+.btn-close-custom:hover { color: white; }
+
+/* Sticky Preview */
+.preview-sticky { position: sticky; top: 0; }
+.customer-card-preview {
+  background: #1e293b;
+  border-color: rgba(255,255,255,0.05);
+}
+.bg-purple-tag { background: var(--main-purple); }
+.btn-purple-sm {
+  background: var(--main-purple); border: none;
+  color: white; border-radius: 8px; font-size: 0.8rem;
+  padding: 6px 15px;
+}
+.btn-purple{
+  background: var(--main-purple); border: none;
+  color: white; border-radius: 10px; font-size: 1rem;
+  padding: 10px 20px; font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.glass-effect {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.order-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--main-purple); 
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.text-purple {
+  color: #a855f7;
+}
+
+.bg-purple {
+  background-color: var(--main-purple)
+}
+@media (max-width: 768px) {
+  .admin-page-header{
+    padding-top: 40px !important;
+  }
+}

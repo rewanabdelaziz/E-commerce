@@ -9,6 +9,7 @@ import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 import { environment } from '../environments/environment';
 import { accessTokenInterceptor } from './shared/interceprors/access-token.interceptor';
 import { AuthService } from './auth/service/auth.service';
+import { provideAnimations } from '@angular/platform-browser/animations';
 
 function initializeAuth(authService: AuthService) {
   return () => authService.initAuth();
@@ -22,6 +23,7 @@ export const appConfig: ApplicationConfig = {
                     scrollPositionRestoration: 'enabled' 
                   })),
     provideHttpClient(withFetch(),withInterceptors([spinnerInterceptor,accessTokenInterceptor])),
+    provideAnimations(), 
     provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),
@@ -35,3 +37,5 @@ export const appConfig: ApplicationConfig = {
     
   ]
 };
+
+

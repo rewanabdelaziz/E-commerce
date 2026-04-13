@@ -12,12 +12,17 @@ p,span i{
     background-color: var(--card-bg);
     border: var(--glass-border) 1px solid;
     border-radius: 10px;
+    color: var(--text-light);
 }
 input{
     color: var(--text-light);   
 }
 input::placeholder {
   color: var(--text-muted);
+}
+small{
+    color: var(--error-red);
+    background-color: var(--error-bg);
 }
 .small{
     font-size: smaller;

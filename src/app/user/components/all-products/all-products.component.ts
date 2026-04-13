@@ -8,41 +8,52 @@ import { FormsModule} from '@angular/forms';
 import { UserCartService } from '../../services/userCart.service';
 import { NgxSliderModule } from '@angular-slider/ngx-slider';
 import { Options } from '@angular-slider/ngx-slider';
+import { AuthService } from '../../../auth/service/auth.service';
+import { ImageFallbackDirective } from '../../../shared/directive/image-fallback.directive';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-all-products',
   standalone: true,
-  imports: [DecimalPipe,FormsModule,CommonModule,NgxSliderModule],
+  imports: [DecimalPipe, FormsModule, CommonModule, NgxSliderModule, ImageFallbackDirective],
   templateUrl: './all-products.component.html',
   styleUrls: ['./all-products.component.css']
 })
 export class AllProductsComponent implements OnInit {
 
   Products = signal<Product[]>([]);
-  cart:{item:Product,quantity:number}[]=[]
+  cart: { item: Product, quantity: number }[] = []
   Allcategories: Category[] = [];
-  // category:string='all';
-  selectedCategoryId=signal<number | null>(null);
-  isfiltered= signal<boolean>(false)
+  selectedCategoryId = signal<number | null>(null);
+  isfiltered = signal<boolean>(false)
   offset = signal<number>(0);
   isMoreData = signal<boolean>(true);
 
-  private _products= inject(ProductsService);
+  private _products = inject(ProductsService);
   private _router = inject(Router);
   private _activatedRoute = inject(ActivatedRoute);
   private _cartService = inject(UserCartService);
+  private _auth = inject(AuthService);
 
-  minValue=signal(0);
-  maxValue=signal(2000);
+  minValue = signal(0);
+  maxValue = signal(2000);
   options: Options = {
     floor: 0,
     ceil: 2000,
     step: 10,
-    hideLimitLabels: true, 
-    hidePointerLabels: false 
+    hideLimitLabels: true,
+    hidePointerLabels: false
   };
 
-
+  private Toast = Swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 2000,
+    timerProgressBar: true,
+    background: '#1e293b',
+    color: '#fff'
+  });
 
   ngOnInit() {
     this._activatedRoute.paramMap.subscribe(params => {
@@ -58,8 +69,7 @@ export class AllProductsComponent implements OnInit {
     this.getcats()
   }
 
-
-  clearFilters(){
+  clearFilters() {
     this.isfiltered.set(false)
     this.selectedCategoryId.set(null);
     this.minValue.set(0);
@@ -68,25 +78,23 @@ export class AllProductsComponent implements OnInit {
     this.fetchData();
   }
 
-  getProductbycat(id:number){
+  getProductbycat(id: number) {
     this.isfiltered.set(true)
     this.selectedCategoryId.set(id);
     this.resetPagination();
-    this.fetchData(); 
+    this.fetchData();
   }
 
-  getcats(){
+  getcats() {
     this._products.getAllCategories(5).subscribe({
-    next: (res) =>{
-      this.Allcategories=res
-      // console.log(this.categories)
-    },
-    error: (err) =>{
-      console.log(err)
-      this._router.navigate(['**'])
-
-    }
-  })
+      next: (res) => {
+        this.Allcategories = res
+      },
+      error: (err) => {
+        console.log(err)
+        this._router.navigate(['**'])
+      }
+    })
   }
 
   filterByPrice() {
@@ -96,7 +104,7 @@ export class AllProductsComponent implements OnInit {
 
   resetPagination() {
     this.offset.set(0);
-    this.Products.set([]); 
+    this.Products.set([]);
     this.isMoreData.set(true);
   }
 
@@ -106,8 +114,7 @@ export class AllProductsComponent implements OnInit {
     const max = this.maxValue();
     const catId = this.selectedCategoryId();
 
-    
-    this._products.filterProductsByCategoryAndPrice(catId, min, max,currentOffset).subscribe({
+    this._products.filterProductsByCategoryAndPrice(catId, min, max, currentOffset).subscribe({
       next: (res) => {
         this.Products.update(prd => [...prd, ...res])
         if (res.length === 0 || res.length < this._products.limit()) {
@@ -116,71 +123,46 @@ export class AllProductsComponent implements OnInit {
       },
       error: (err) => this._router.navigate(['**'])
     });
-    
-
-
-    // if (this.isfiltered() && catId !== null) {
-    //   this._products.getProductbycatId(catId, currentOffset).subscribe({
-    //     next: (res) => {
-    //       this.Products.update(prd => [...prd, ...res])
-    //       if (res.length === 0 || res.length < this._products.limit()) {
-    //         this.isMoreData.set(false);
-    //       }
-    //     },
-    //     error: (err) => this._router.navigate(['**'])
-    //   });
-    // } else {
-    //   this._products.getAllProducts(currentOffset).subscribe({
-    //     next: (res) => {
-    //       this.Products.update(prd => [...prd, ...res])
-    //       if (res.length === 0 || res.length < this._products.limit()) {
-    //         this.isMoreData.set(false);
-    //       }
-    //     },
-    //     error: (err) => this._router.navigate(['**'])
-    //   });
-    // }
-
   }
 
-  loadMore(){
+  loadMore() {
     this.offset.update(value => value + this._products.limit());
-    this.fetchData();    
+    this.fetchData();
   }
 
-  addToCart(prd:Product){
-    this._cartService.addToCart(prd)
+  addToCart(prd: Product, event: any) {
+    event.stopPropagation();
+    
+    if (!this._auth.isLoggedIn()) {
+      Swal.fire({
+        title: 'Login Required',
+        text: 'You need to login first to add items to your cart!',
+        icon: 'info',
+        showCancelButton: true,
+        confirmButtonColor: '#a855f7',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: 'Go to Login',
+        background: '#1e293b',
+        color: '#fff'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this._router.navigate(['/auth/login']);
+        }
+      });
+      return;
+    }
+
+  
+    this._cartService.addToCart(prd);
+    this.Toast.fire({
+      icon: 'success',
+      title: 'Added to cart successfully',
+      background: '#1e293b'
+    });
   }
 
   showDetails(id: number) {
     this._router.navigate(['/user/details', id]);
   }
-
-  // filterByPrice(){
-  //   if(this.selectedCategoryId){
-  //     this.Products().filter(prd => prd.price >= this.minValue() && prd.price <= this.maxValue())
-
-  //   }else{
-  //     this._products.filterProductsByPrice(this.minValue(), this.maxValue()).subscribe({
-  //     next: (res) =>{
-  //       this.Products.set(res)
-  //       if (res.length === 0 || res.length < this._products.limit()) {
-  //           this.isMoreData.set(false);
-  //       }
-  //       // console.log(this.products)
-  //     },
-  //     error: (err) =>{
-  //       console.log(err)
-  //       this._router.navigate(['**'])
-  //     }
-  //   })
-  //   }
-   
-    
-  // }
-
- 
-
-
 
 }

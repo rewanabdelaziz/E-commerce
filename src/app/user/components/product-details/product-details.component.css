@@ -1,21 +1,3 @@
-/* .box{
-  height: 100vh;
-}
-@media (width < 575px) {
-  .boxImg{
-  height: 40%;
-  display: flex;
-  justify-content: center;
-  width: 50%;
-  }
-} */
-
-
-body {
-  background-color: var(--dark-bg);
-  color: var(--text-primary);
-  font-family: 'Inter', sans-serif;
-}
 
 /* Utilities */
 .rounded-20 { border-radius: 20px; }
@@ -182,7 +164,6 @@ body {
 
 
 @media (max-width: 991px) {
-  .prd-title { font-size: 2rem; }
-  /* .product-info-col { margin-top: 2rem; } */
+  .prd-title { font-size: 1rem; }
 }
 

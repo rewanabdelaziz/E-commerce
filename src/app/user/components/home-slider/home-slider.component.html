@@ -15,7 +15,7 @@
                 <h3>{{cat.name}}</h3>
                 <span>Explore Collection</span>
             </div>
-            <img [src]="cat.image" [alt]="cat.name">
+            <img [src]="cat.image" [alt]="cat.name" [appImageFallback]="cat.name">
           </div>
         }
         @for(cat of productsService.categories(); track 'clone-cat-' + cat.id){
@@ -24,7 +24,7 @@
                 <h3>{{cat.name}}</h3>
                 <span>Explore Collection</span>
             </div>
-            <img [src]="cat.image" [alt]="cat.name">
+            <img [src]="cat.image" [alt]="cat.name" [appImageFallback]="cat.name">
           </div>
         }
       </div>
@@ -47,7 +47,7 @@
                 <h3>{{product.title}}</h3>
                 <span>${{product.slug}}</span>
             </div>
-             <img [src]="product.images[0]? product.images[0] : ''" [alt]="product.title">
+             <img [src]="product.images[0]? product.images[0] : ''" [alt]="product.title" [appImageFallback]="product.title">
           </div>
         }
         }
@@ -58,7 +58,7 @@
                 <h3>{{product.title}}</h3>
                 <span>${{product.slug}}</span>
             </div>
-             <img [src]="product.images[0]? product.images[0] : ''" [alt]="product.title">
+             <img [src]="product.images[0]? product.images[0] : ''" [alt]="product.title" [appImageFallback]="product.title">
           </div>
         }
         }

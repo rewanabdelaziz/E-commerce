@@ -100,8 +100,8 @@ export class LoginComponent {
 
   fillDemoData() {
     this.logInForm.patchValue({
-      email: 'john@mail.com',
-      password: 'changeme'
+      email: 'admin@mail.com',
+      password: 'admin123'
     });
     
   }

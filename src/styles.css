@@ -9,12 +9,18 @@
   --btn-hover:#5a52e0;
   --text-primary: #ffffff;
   --success-green: #22c55e;
+  --error-red: #ff4d4d; 
+  --error-bg: rgba(239, 68, 68, 0.1);
 }
 
 body {
   background-color: var(--dark-bg);
   color: var(--text-light);
   font-family: 'Inter', sans-serif;
+}
+
+.text-muted {
+  color: var(--text-muted) !important;
 }
 
 .glass-card {
@@ -50,4 +56,12 @@ body {
 .transition-hover:hover {
   transform: translateY(-8px);
   box-shadow: 0 10px 20px rgba(108, 99, 255, 0.2) !important;
+}
+
+button:disabled{
+  background-color: #333 !important; 
+  border-color: #444 !important;     
+  color: #777 !important;           
+  opacity: 0.6;                     
+  cursor: not-allowed;               
 }

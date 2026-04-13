@@ -1,92 +1,89 @@
 <nav class="navbar navbar-expand-lg">
   <div class="container-fluid d-flex justify-content-between">
-    <div class="brand">
-        <svg xmlns="http://www.w3.org/2000/svg" 
-           width="40" height="40" 
-           viewBox="0 0 24 24" 
-           fill="none" 
-           stroke="currentColor" 
-           stroke-width="2" 
-           class="bg-purple p-2 rounded-3">
-          <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path>
-          <path d="M3 6h18"></path>
-          <path d="M16 10a4 4 0 0 1-8 0"></path>
-        </svg>
-    <a class="navbar-brand text-purple" href="#">EliteCommerce</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
+    
+    <div class="brand d-flex align-items-center">
+      <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2" class="bg-purple p-2 rounded-3">
+        <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path>
+        <path d="M3 6h18"></path>
+        <path d="M16 10a4 4 0 0 1-8 0"></path>
+      </svg>
+      <a class="navbar-brand text-purple ms-2" routerLink="/user/home">EliteCommerce</a>
     </div>
-    <div class="collapse navbar-collapse " id="navbarText">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0 w-100 d-flex justify-content-center">
-        @if(role()=='admin'){
-            <li class="nav-item mx-3" routerLinkActive="active">
-              <a class="nav-link w-100" aria-current="page" routerLink="/admin/products">Dashboard</a>
-            </li>
-            <li class="nav-item mx-3" routerLinkActive="active">
-              <a class="nav-link w-100" routerLink="/admin/products">Inventory</a>
-            </li>
-            <li class="nav-item mx-3" routerLinkActive="active">
-              <a class="nav-link w-100" routerLink="/admin/cart">Analytics</a>
-            </li>
-        }@else if(role() == 'customer'){
-            <li class="nav-item mx-3" routerLinkActive="active">
-              <a class="nav-link w-100" aria-current="page" routerLink="/user/home">Home</a>
-            </li>
-            <li class="nav-item mx-3" routerLinkActive="active">
-              <a class="nav-link w-100" routerLink="/user/products" >Shop</a>
-            </li>
-            <li class="nav-item mx-3" routerLinkActive="active">
-              <a class="nav-link w-100" routerLink="/user/about">About</a>
-            </li>
-            <!-- <li class="nav-item mx-3" routerLinkActive="active">
-              <a class="nav-link w-100" routerLink="/user/cart" >My order</a>
-            </li> -->
-        }@else {
-            <li class="nav-item mx-3" routerLinkActive="active">
-              <a class="nav-link w-100" aria-current="page" routerLink="/user/home">Home</a>
-            </li>
-            <li class="nav-item mx-3" routerLinkActive="active">
-              <a class="nav-link w-100" routerLink="/user/products">Shop</a>
-            </li>
-            <li class="nav-item mx-3" routerLinkActive="active">
-              <a class="nav-link w-100" routerLink="/user/about">About</a>
-            </li>
-        }
-      </ul>
 
-    </div>
-    <div class="buttons d-flex">
-      <div class="btn btn-cart me-3" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions"><i class="fa-solid fa-cart-arrow-down"></i>
+    <div class="d-flex align-items-center order-lg-3 gap-2">
+      @if(islogged() && role() !== 'admin'){
+      <div class="btn btn-cart me-2" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions">
+        <i class="fa-solid fa-cart-arrow-down"></i>
         @if(cartProducts().length > 0){
-          <sup class="notication bg-danger text-white rounded-circle ">{{cartProducts().length}}</sup>
+          <sup class="notication bg-danger text-white rounded-circle">{{cartProducts().length}}</sup>
         }
       </div>
+    }
+
+      <button class="navbar-toggler custom-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="buttons d-none d-lg-flex align-items-center">
         @if(islogged()){
-          <div class="d-flex align-items-center gap-3">
-              <div class="user-profile d-flex align-items-center gap-2 px-2 py-1 rounded-pill glass-effect" [attr.title]="user()?.name">
-                  <img [src]="user()?.avatar" 
-                       [alt]="user()?.name" 
-                       class="user-avatar rounded-circle border border-2 border-purple" 
-                       style="width: 30px; height: 30px;">
-                  <span class="text-white d-none d-md-inline fw-medium small">{{ user()?.name }}</span>
-              </div>
-      
-              <button class="btn text-white bg-purplel px-3 btn-logout" (click)="logout()">
-                  <i class="fa-solid fa-arrow-right-from-bracket me-1"></i> Logout
-              </button>
+          <div class="user-profile d-flex align-items-center gap-2 px-2 py-1 rounded-pill glass-effect me-3" [attr.title]="user()?.name">
+            <img [src]="user()?.avatar" class="user-avatar rounded-circle border border-2 border-purple" style="width: 30px; height: 30px;">
+            <span class="text-white fw-medium small">{{ user()?.name }}</span>
           </div>
-            
-        }@else {
-            <button class="btn text-white log px-3 me-2" routerLink="/auth/login">login</button>
-            <button class="btn text-white bg-purple" routerLink="/auth/signup">Register</button>
+          <button class="btn text-white bg-purple px-3 btn-logout" (click)="logout()">
+            <i class="fa-solid fa-arrow-right-from-bracket me-1"></i> Logout
+          </button>
+        } @else {
+          <button class="btn text-white log px-3 me-2" routerLink="/auth/login">login</button>
+          <button class="btn text-white bg-purple" routerLink="/auth/signup">Register</button>
         }
+      </div>
     </div>
+
+    <div class="collapse navbar-collapse order-lg-2" id="navbarText">
+      <ul class="navbar-nav mx-auto mb-2 mb-lg-0 text-center">
+        <!-- @if(role()=='admin'){
+          <li class="nav-item mx-lg-3"><a class="nav-link" routerLink="/admin/dashboard" routerLinkActive="active">Dashboard</a></li>
+          <li class="nav-item mx-lg-3"><a class="nav-link" routerLink="/admin/products" routerLinkActive="active">Inventory</a></li>
+          <li class="nav-item mx-lg-3"><a class="nav-link" routerLink="/admin/categories" routerLinkActive="active">Categories Managements</a></li>
+          <li class="nav-item mx-lg-3"><a class="nav-link" routerLink="/admin/usersManagements" routerLinkActive="active">User Managements</a></li>
+        } @else {
+          <li class="nav-item mx-lg-3"><a class="nav-link" routerLink="/user/home" routerLinkActive="active">Home</a></li>
+          <li class="nav-item mx-lg-3"><a class="nav-link" routerLink="/user/products" routerLinkActive="active">Shop</a></li>
+          <li class="nav-item mx-lg-3"><a class="nav-link" routerLink="/user/about" routerLinkActive="active">About</a></li>
+        } -->
+
+        <li class="nav-item mx-lg-3"><a class="nav-link" routerLink="/user/home" routerLinkActive="active">Home</a></li>
+        <li class="nav-item mx-lg-3"><a class="nav-link" routerLink="/user/products" routerLinkActive="active">Shop</a></li>
+        <li class="nav-item mx-lg-3"><a class="nav-link" routerLink="/user/about" routerLinkActive="active">About</a></li>
+        @if(islogged()){
+          <li class="nav-item mx-lg-3"><a class="nav-link" routerLink="/user/orders" routerLinkActive="active">My Orders</a></li>
+        }
+
         
-      
+        <li class="nav-item d-lg-none mt-3 border-top pt-3 border-secondary">
+          @if(islogged()){
+            <div class="d-flex align-items-center justify-content-center gap-3 mb-3">
+                <img [src]="user()?.avatar" class="rounded-circle border border-2 border-purple" style="width: 45px; height: 45px;">
+                <div class="text-start">
+                    <p class="text-white mb-0 fw-bold">{{ user()?.name }}</p>
+                    <small class="user-name">Active Session</small>
+                </div>
+            </div>
+            <button class="btn text-white bg-purple w-100 py-2" (click)="logout()">
+              <i class="fa-solid fa-arrow-right-from-bracket me-2"></i> Logout
+            </button>
+          } @else {
+            <button class="btn text-white log w-100 mb-2" routerLink="/auth/login">Login</button>
+            <button class="btn text-white bg-purple w-100" routerLink="/auth/signup">Register</button>
+          }
+        </li>
+      </ul>
+    </div>
   </div>
 </nav>
-
+<!-- Shopping Cart Offcanvas -->
 <div class="offcanvas offcanvas-end elite-cart-canvas" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
   
   <div class="offcanvas-header py-4 px-3 border-bottom border-dark-elite">
@@ -130,7 +127,7 @@
       <span class="text-white fw-bold fs-4">${{total | number:'1.2-2'}}</span>
     </div>
     
-    <button class="btn-checkout w-100 mb-3">
+    <button class="btn-checkout w-100 mb-3" (click)="checkout()" [disabled]="cartProducts().length === 0">
       Proceed to Checkout <i class="fa-solid fa-arrow-right ms-2"></i>
     </button>
     <button class="btn-continue-shopping w-100" data-bs-dismiss="offcanvas" (click)="clearCart()">

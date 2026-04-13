@@ -1,0 +1,80 @@
+.admin-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+}
+
+.glass-effect {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.admin-table {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.admin-table thead th {
+  padding: 1rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: #a855f7; /* Purple color */
+}
+
+.admin-table tbody td {
+  padding: 1.2rem 1rem;
+}
+
+.form-select-sm {
+  font-size: 0.85rem;
+  cursor: pointer;
+  min-width: 130px;
+}
+
+.text-purple {
+  color: #a855f7;
+}
+
+.btn-link {
+  transition: transform 0.2s;
+}
+
+.btn-link:hover {
+  transform: scale(1.2);
+}
+
+tr:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.table{
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+    background-color: var(--dark-bg) !important;
+}
+
+.btn-filter {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.7);
+    border-radius: 12px;
+    padding: 8px 16px;
+    transition: all 0.3s ease;
+}
+
+.btn-filter:hover {
+    background: rgba(168, 85, 247, 0.1);
+    color: #a855f7;
+    border-color: #a855f7;
+}
+
+.btn-filter.active {
+    background: #a855f7;
+    color: white;
+    border-color: #a855f7;
+    box-shadow: 0 4px 15px rgba(168, 85, 247, 0.4);
+}
+
+.badge {
+    font-size: 0.7rem;
+    vertical-align: middle;
+}

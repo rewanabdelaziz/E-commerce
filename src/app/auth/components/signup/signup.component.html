@@ -1,5 +1,5 @@
 <div class="container d-flex justify-content-center align-items-center min-vh-100">
-  <div class="card p-4 shadow" style="width: 400px;">
+  <div class="card p-4 shadow w-100" >
     <div class="icon-box p-2 mb-3 text-light d-flex justify-content-center w-100">
         <svg xmlns="http://www.w3.org/2000/svg" 
            width="60" height="60" 
@@ -36,9 +36,9 @@
         @if(userName?.touched){
           <div class="mt-2">
             @if(userName?.errors?.['required']){
-              <small class="bg-danger text-light p-1">User Name is required</small>
+              <small class="p-1 rounded">User Name is required</small>
             }@else if ( userName?.errors?.['pattern']) {
-              <small class="bg-danger text-light p-1">Username must be 3–20 characters, letters and numbers only.</small>
+              <small class="p-1 rounded">Username must be 3–20 characters, letters and numbers only.</small>
             }
         </div>
         }
@@ -63,9 +63,9 @@
         @if(email?.touched){
           <div class="mt-2">
             @if(email?.errors?.['required']){
-              <small class="bg-danger text-light p-1">email is required</small>
+              <small class="p-1 rounded">email is required</small>
             }@else if ( email?.errors?.['pattern']) {
-              <small class="bg-danger text-light p-1">Please enter a valid email address.</small>
+              <small class="p-1 rounded">Please enter a valid email address.</small>
             }
           </div>
          }
@@ -89,9 +89,9 @@
          @if(password?.touched){
           <div class="mt-2">
             @if( password?.errors?.['required']){
-              <small class="bg-danger text-light p-1">password is required</small>
+              <small class="p-1 rounded">password is required</small>
             }@else if ( password?.errors?.['pattern']) {
-              <small class="bg-danger text-light p-1"> Password must be at least 8 characters, includes letters and numbers only.</small>
+              <small class="p-1 rounded"> Password must be at least 8 characters, includes letters and numbers only.</small>
             }
           </div>
         }
@@ -104,7 +104,7 @@
       
       @if(errorMessage()){
         <div class="mb-3">
-          <small class="bg-danger text-light p-1">{{errorMessage()}}</small>
+          <small class="p-1 rounded">{{errorMessage()}}</small>
         </div>
       }
       <button type="submit" class="btn btn-success w-100" [disabled]="signupForm.invalid">Sign Up</button>

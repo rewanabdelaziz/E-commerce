@@ -1,7 +1,13 @@
-
 .input-group-text{
     background-color: var(--secondary-color);
     color: var(--primary-color);
+}
+.container{
+    width: 400px;
+}
+small{
+    color: var(--error-red);
+    background-color: var(--error-bg);
 }
 p,span i{
     color: var(--text-muted);
@@ -52,11 +58,11 @@ a{
         width: 100% ;
         padding: 15px !important;
     }
-    .sign-up-form{
-        width: 90% !important;
-    }
-    .card{
-        width: auto !important;
+
+}
+@media (max-width:400px) {
+        .container{
+        width: 100% !important;
     }
 
 }
