@@ -57,6 +57,10 @@
         <li class="nav-item mx-lg-3"><a class="nav-link" routerLink="/user/home" routerLinkActive="active">Home</a></li>
         <li class="nav-item mx-lg-3"><a class="nav-link" routerLink="/user/products" routerLinkActive="active">Shop</a></li>
         <li class="nav-item mx-lg-3"><a class="nav-link" routerLink="/user/about" routerLinkActive="active">About</a></li>
+        @if(islogged()){
+          <li class="nav-item mx-lg-3"><a class="nav-link" routerLink="/user/orders" routerLinkActive="active">My Orders</a></li>
+        }
+
         
         <li class="nav-item d-lg-none mt-3 border-top pt-3 border-secondary">
           @if(islogged()){
@@ -123,7 +127,7 @@
       <span class="text-white fw-bold fs-4">${{total | number:'1.2-2'}}</span>
     </div>
     
-    <button class="btn-checkout w-100 mb-3">
+    <button class="btn-checkout w-100 mb-3" (click)="checkout()" [disabled]="cartProducts().length === 0">
       Proceed to Checkout <i class="fa-solid fa-arrow-right ms-2"></i>
     </button>
     <button class="btn-continue-shopping w-100" data-bs-dismiss="offcanvas" (click)="clearCart()">

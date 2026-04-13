@@ -1,4 +1,3 @@
-// old
 export interface IcartModel {
   userId:string | number,
   date: Date,

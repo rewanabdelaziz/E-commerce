@@ -1,0 +1,92 @@
+<div class="admin-container p-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2 class="text-white fw-bold"><i class="fas fa-tasks me-2"></i>Orders Management</h2>
+      <p class="text-muted small">Monitor and update customer orders</p>
+    </div>
+   
+    <button (click)="loadAllOrders()" class="btn btn-outline-light rounded-pill px-3">
+      <i class="fas fa-sync-alt" [class.fa-spin]="isLoading()"></i> Refresh
+    </button>
+  </div>
+
+   <div class="d-flex flex-wrap gap-2 mb-4">
+        <button (click)="setFilter('all')" 
+                [class.active]="filterStatus() === 'all'"
+                class="btn btn-filter">
+          All Orders <span class="badge bg-secondary ms-1">{{ orders().length }}</span>
+        </button>
+        
+        @for (st of statuses; track st) {
+          <button (click)="setFilter(st)" 
+                  [class.active]="filterStatus() === st"
+                  class="btn btn-filter text-capitalize">
+            {{ st }}
+            </button>
+        }
+    </div>
+
+  <div class="table-responsive glass-effect rounded-4 overflow-hidden">
+    <table class=" table-hover admin-table mb-0 text-white w-100">
+      <thead class="bg-white bg-opacity-10 text-uppercase small">
+        <tr>
+          <th class="ps-4">Order ID</th>
+          <th>Customer Info</th>
+          <th>Date</th>
+          <th>Total</th>
+          <th>Status</th>
+          <th class="text-center">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        @if (isLoading()) {
+          <tr>
+            <td colspan="6" class="text-center py-5">
+              <i class="fas fa-spinner fa-spin fa-2x text-purple"></i>
+            </td>
+          </tr>
+        } @else {
+          @for (order of filteredOrders(); track order.id) {
+            <tr class="align-middle border-bottom border-white border-opacity-10">
+              <td class="ps-4">
+                <span class="text-purple fw-bold">#{{order.id!.substring(0,5)}}</span>
+              </td>
+              <td>
+                <div class="d-flex flex-column">
+                  <span class="fw-bold">User ID: {{order.userId}}</span>
+                  <span class="small text-muted">{{order.items.length}} Products</span>
+                </div>
+              </td>
+              <td class="small">{{ order.createdAt.seconds * 1000 | date:'medium' }}</td>
+              <td class="fw-bold text-success">${{order.totalPrice | number:'1.2-2'}}</td>
+              <td>
+                <select 
+                  [ngModel]="order.status" 
+                  (ngModelChange)="changeStatus(order.id!, $event)"
+                  class="form-select form-select-sm bg-dark text-white border-secondary rounded-pill"
+                  [ngClass]="{
+                    'border-warning': order.status === 'pending',
+                    'border-success': order.status === 'delivered',
+                    'border-danger': order.status === 'shipped'
+                  }">
+                  @for (st of statuses; track st) {
+                    <option [value]="st">{{st | titlecase}}</option>
+                  }
+                </select>
+              </td>
+              <td class="text-center">
+                <button (click)="deleteOrder(order.id!)" class="btn btn-link text-danger p-0 mx-2" title="Delete Order">
+                  <i class="fas fa-trash-alt"></i>
+                </button>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="6" class="text-center py-5 text-muted">No orders found.</td>
+            </tr>
+          }
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

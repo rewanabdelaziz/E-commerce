@@ -192,17 +192,31 @@
 .btn-action:hover { transform: scale(1.1); }
 
 /* Modal & Live Preview Custom CSS */
+
 .modal-overlay {
-  position: fixed; inset: 0;
+  position: fixed; 
+  inset: 0;
   background: rgba(0, 0, 0, 0.85);
   z-index: 3000;
-  /* display: flex; align-items: center; justify-content: center; */
-  padding: 15px;
+  display: flex;         
+  align-items: center;    
+  justify-content: center; 
+  padding: 20px;          
 }
 
 .modal-card {
-  width: 100%; max-width: 950px;
+  width: 100%; 
+  max-width: 950px;
   border-radius: 24px;
+  max-height: 90vh;      
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;     
+}
+
+.modal-body-content {
+  overflow-y: auto;
+  flex: 1;
 }
 
 input::placeholder, textarea::placeholder {

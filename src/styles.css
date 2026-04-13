@@ -19,6 +19,10 @@ body {
   font-family: 'Inter', sans-serif;
 }
 
+.text-muted {
+  color: var(--text-muted) !important;
+}
+
 .glass-card {
   background: var(--card-bg);
   backdrop-filter: blur(10px);
