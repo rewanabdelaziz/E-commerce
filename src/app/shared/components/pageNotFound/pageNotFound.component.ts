@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-
+import { Location } from '@angular/common';
 @Component({
   selector: 'app-pageNotFound',
   standalone: true,
@@ -8,11 +8,12 @@ import { RouterLink } from '@angular/router';
   templateUrl: './pageNotFound.component.html',
   styleUrls: ['./pageNotFound.component.css']
 })
-export class PageNotFoundComponent implements OnInit {
+export class PageNotFoundComponent  {
 
-  constructor() { }
+  constructor(private location: Location) { }
 
-  ngOnInit() {
+  goBack() {
+    this.location.back();
   }
 
 }

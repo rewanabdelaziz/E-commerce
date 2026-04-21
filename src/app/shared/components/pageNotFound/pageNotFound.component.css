@@ -1,0 +1,113 @@
+.error-container {
+  height: 100vh;
+  width: 100%;
+  background: radial-gradient(circle at center, #1e1b4b 0%, #0f172a 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  color: white;
+}
+
+.glass-morph-card {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 3rem 2rem;
+  border-radius: 40px;
+  z-index: 10;
+  max-width: 500px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+.error-code {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: 8rem;
+  font-weight: 900;
+  line-height: 1;
+  margin-bottom: 1rem;
+  background: linear-gradient(to bottom, #fff, #a5a1ff);
+  -webkit-text-fill-color: transparent;
+   -webkit-background-clip: text;
+   background-clip: text;
+}
+.digit{
+color: inherit; 
+  background: inherit;
+  -webkit-background-clip: inherit;
+    background-clip: inherit;
+  -webkit-text-fill-color: inherit;
+}
+.circle-glow {
+  width: 80px;
+  height: 100px;
+  background: #6c63ff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  color: white;
+  -webkit-text-fill-color: white;
+  box-shadow: 0 0 40px rgba(108, 99, 255, 0.6);
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Orbs Background */
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  z-index: 1;
+}
+.orb-1 {
+  width: 300px; height: 300px;
+  background: rgba(108, 99, 255, 0.2);
+  top: -100px; right: -100px;
+}
+.orb-2 {
+  width: 400px; height: 400px;
+  background: rgba(165, 161, 255, 0.1);
+  bottom: -150px; left: -150px;
+}
+
+
+.btn-purple-glow {
+  background: #6c63ff;
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 15px;
+  font-weight: 600;
+  transition: all 0.3s;
+  box-shadow: 0 10px 20px rgba(108, 99, 255, 0.3);
+}
+.btn-purple-glow:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 25px rgba(108, 99, 255, 0.4);
+}
+
+.btn-outline-glass {
+  background: rgba(255, 255, 255, 0.05);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 12px 25px;
+  border-radius: 15px;
+  transition: all 0.3s;
+}
+.btn-outline-glass:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #a5a1ff;
+}
+.glass-morph-card{
+  border: 1px solid rgba(165, 161, 255, 0.2);
+  box-shadow: 0 0 30px rgba(108, 99, 255, 0.1);
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+}

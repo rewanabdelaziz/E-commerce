@@ -1,8 +1,28 @@
-<div class="container d-flex flex-column align-items-center justify-content-center vh-100 text-center">
-  <h1 class="display-1 fw-bold text-danger">404</h1>
-  <p class="fs-3"><span class="text-danger">Oops!</span> Page not found.</p>
-  <p class="lead">The page you're looking for doesn't exist or has been moved.</p>
-  <a routerLink="/" class="btn btn-primary mt-3">
-    <i class="bi bi-house-door-fill"></i> Back to Home
-  </a>
+<div class="error-container">
+  <div class="glass-morph-card text-center">
+    <div class="error-code">
+      <span class="digit">4</span>
+      <div class="circle-glow">
+       <i class="fa-solid fa-cart-arrow-down"></i>
+      </div>
+      <span class="digit">4</span>
+    </div>
+    
+    <p class="text-muted mb-4 px-4">
+      The product or page you're looking for has drifted away into the void. 
+      Don't worry, we can get you back to the shop.
+    </p>
+
+    <div class="d-flex flex-column flex-sm-row justify-content-center gap-3">
+      <button (click)="goBack()" class="btn btn-outline-glass">
+        <i class="fa-solid fa-arrow-left me-2"></i> Previous Page
+      </button>
+      <button routerLink="/user/home" class="btn btn-purple-glow">
+        <i class="fa-solid fa-house me-2"></i> Back to Home
+      </button>
+    </div>
+  </div>
+
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
 </div>
