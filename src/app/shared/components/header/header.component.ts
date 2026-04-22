@@ -71,21 +71,31 @@ export class HeaderComponent implements OnInit {
   }
 
   minusQauntity(id: number) {
-    this.getProductbyId(id)
-    if (this.cartProducts()[this.currentIndex].quantity > 1) {
-      this.cartProducts()[this.currentIndex].quantity -= 1
-      this.setToLocalStorage()
-      // this.getTotalPrice()
-    } else {
-      this.deleteProduct(id); 
-    }
-  }
+    this._cartService.cart.update((currentCart) => {
+      return currentCart.map(item => {
+        if (item.item.id === id) {
+          if (item.quantity > 1) {
+            return { ...item, quantity: item.quantity - 1 }; 
+          }
+        }
+        return item;
+      }).filter(item => item.quantity > 0); 
+    });
+  
+    this.setToLocalStorage();
+ }
 
   plusQauntity(id: number) {
-    this.getProductbyId(id)
-    this.cartProducts()[this.currentIndex].quantity += 1
-    this.setToLocalStorage()
-    // this.getTotalPrice()
+    this._cartService.cart.update((currentCart) => {
+      return currentCart.map(item => {
+        if (item.item.id === id) {
+          return { ...item, quantity: item.quantity + 1 }; 
+        }
+        return item;
+      });
+    });
+  
+    this.setToLocalStorage();
   }
 
   clearCart() {
