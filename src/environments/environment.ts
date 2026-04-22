@@ -1,13 +1,6 @@
 export const environment = {
   apiUrl: 'https://api.escuelajs.co/api/v1/',
   production: true,
-  // adminAccount:{
-  // "email": "rewan@admin.com",
-  // "name": "Rewan Abd Elaziz",
-  // "password": "123456Rewan",
-  // "role": "admin",
-  // "avatar": "https://api.dicebear.com/9.x/miniavs/svg?seed=Felix"
-  // },
   firebaseConfig: {
     apiKey: "AIzaSyC5iB1kmtf3WeaV0Xx4D5ywiWtMGPegt0w",
     authDomain: "e-commerce-1d3a7.firebaseapp.com",

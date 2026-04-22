@@ -63,10 +63,18 @@
             </div>
           </td>
         </tr>
+        }@empty {
+          @if (!isSearching() && !_spinnerservice.isLoading()) {
+          <tr>
+            <td colspan="6" class="text-center py-5" style="border: none;">
+              <h4 class="text-white">No products found!</h4>
+            </td>
+          </tr>
+        }
       }
       </tbody>
     </table>
-    @if(loadMore() && !isSearching()){
+    @if(loadMore()){
       <div class="d-flex justify-content-center my-4">
         <button class="btn btn-purple-glow w-sm-auto" (click)="loadMoreProducts()">
           <i class="fa-solid fa-arrow-down me-2"></i> Load More

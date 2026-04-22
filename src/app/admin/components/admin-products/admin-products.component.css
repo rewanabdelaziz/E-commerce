@@ -111,7 +111,14 @@ input::placeholder, textarea::placeholder {
   color: white; border-radius: 8px; font-size: 0.8rem;
   padding: 6px 15px;
 }
-
+tbody tr:hover .customer-card-preview {
+  background: rgba(30, 41, 59, 0.8);
+  border-color: var(--main-purple);
+  transform: translateY(-5px);
+}
+.table-responsive {
+  min-height: 80vh;
+}
 /* Responsiveness */
 @media (max-width: 576px) {
   .admin-table th:nth-child(1), .admin-table td:nth-child(1) { display: none; } /* ID */

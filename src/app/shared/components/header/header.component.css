@@ -100,7 +100,7 @@ nav{
 .qty-control {
     background: rgba(15, 23, 42, 0.6);
     border-radius: 8px;
-    padding: 2px 8px;
+    padding: 0px ;
 }
 
 .qty-btn {
@@ -148,8 +148,8 @@ nav{
 }
 
 .btn-continue-shopping {
-    background: rgba(255, 255, 255, 0.03);
-    color: #94a3b8;
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
     border: 1px solid rgba(255, 255, 255, 0.05);
     padding: 12px;
     border-radius: 12px;
@@ -158,7 +158,6 @@ nav{
 
 .btn-continue-shopping:hover {
     background: rgba(255, 255, 255, 0.08);
-    color: white;
 }
 
 

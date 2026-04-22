@@ -8,6 +8,7 @@ import { debounceTime, distinctUntilChanged, Subject, switchMap } from 'rxjs';
 import { CategoryManagementsService } from '../../services/category-managements.service';
 import { ImageFallbackDirective } from '../../../shared/directive/image-fallback.directive';
 import Swal from 'sweetalert2'; 
+import { SpinnerService } from '../../../shared/services/spinner.service';
 
 @Component({
   selector: 'app-admin-products',
@@ -20,6 +21,7 @@ export class AdminProductsComponent implements OnInit, OnDestroy {
 
   private _AdminProductsService = inject(AdminProductsService);
   private _AdminCategoriesService = inject(CategoryManagementsService);
+  _spinnerservice = inject(SpinnerService)
   products = this._AdminProductsService.products;
   
   Allcategories = computed(() => {
@@ -56,6 +58,8 @@ export class AdminProductsComponent implements OnInit, OnDestroy {
     private _fb: FormBuilder) { }
 
   ngOnInit(): void {
+    // test
+    this.products.set([]);
     this.ProductForm = this._fb.group({
       title: ['', Validators.required],
       price: ['', Validators.required],

@@ -110,7 +110,7 @@
             
             <div class="qty-control d-flex align-items-center">
               <button class="qty-btn" (click)="minusQauntity(item.item.id)" [disabled]="item.quantity <= 1"><i class="fa-solid fa-minus"></i></button>
-              <span class="qty-value mx-2 text-white">{{item.quantity}}</span>
+              <span class="qty-value mx-3 my-1 text-white">{{item.quantity}}</span>
               <button class="qty-btn" (click)="plusQauntity(item.item.id)"><i class="fa-solid fa-plus"></i></button>
             </div>
           </div>
@@ -124,13 +124,13 @@
   <div class="offcanvas-footer p-4 border-top border-dark-elite glass-effect-footer">
     <div class="d-flex justify-content-between align-items-center mb-4">
       <span class="text-secondary fs-5">Total</span>
-      <span class="text-white fw-bold fs-4">${{total | number:'1.2-2'}}</span>
+      <span class="text-white fw-bold fs-4">${{total() | number:'1.2-2'}}</span>
     </div>
-    
-    <button class="btn-checkout w-100 mb-3" (click)="checkout()" [disabled]="cartProducts().length === 0">
+    <!-- data-bs-dismiss="offcanvas"  to close offcanvas once clicked buttons -->
+    <button class="btn-checkout w-100 mb-3" (click)="checkout()" [disabled]="cartProducts().length === 0" data-bs-dismiss="offcanvas"> 
       Proceed to Checkout <i class="fa-solid fa-arrow-right ms-2"></i>
     </button>
-    <button class="btn-continue-shopping w-100" data-bs-dismiss="offcanvas" (click)="clearCart()">
+    <button class="btn-continue-shopping w-100" data-bs-dismiss="offcanvas" (click)="clearCart()" [disabled]="cartProducts().length === 0">
       clear shop Cart
     </button>
   </div>
