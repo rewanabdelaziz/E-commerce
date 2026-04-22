@@ -58,8 +58,6 @@ export class AdminProductsComponent implements OnInit, OnDestroy {
     private _fb: FormBuilder) { }
 
   ngOnInit(): void {
-    // test
-    this.products.set([]);
     this.ProductForm = this._fb.group({
       title: ['', Validators.required],
       price: ['', Validators.required],
