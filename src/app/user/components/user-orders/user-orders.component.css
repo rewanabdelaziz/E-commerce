@@ -122,6 +122,36 @@ input::placeholder, textarea::placeholder {
 .bg-purple {
   background-color: var(--main-purple)
 }
+
+/* modal */
+.modal{
+  z-index: 3000 !important;
+}
+.modal-backdrop.show {
+  backdrop-filter: blur(8px);
+  background-color: rgba(15, 23, 42, 0.7);
+}
+
+.modal-content.glass-effect {
+  background: rgba(30, 41, 59, 0.85); 
+}
+
+.border-dark-elite {
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.hover-bg-light:hover {
+  background: rgba(255, 255, 255, 0.03);
+  transition: background 0.3s ease;
+}
+
+.modal-body::-webkit-scrollbar {
+  width: 6px;
+}
+.modal-body::-webkit-scrollbar-thumb {
+  background: var(--main-purple);
+  border-radius: 10px;
+}
 @media (max-width: 768px) {
   .admin-page-header{
     padding-top: 40px !important;

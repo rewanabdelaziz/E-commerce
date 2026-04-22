@@ -104,5 +104,5 @@
 }
 
 @media (max-width: 768px) {
-    .border-start-glass { border: none; margin-top: 20px; }
+    .border-start-glass { border: none; }
 }

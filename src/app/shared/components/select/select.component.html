@@ -1,7 +1,0 @@
-<div class="my-2 w-50">
-  <label for="" class="my-1">{{SelectTitle}} </label>
-  <select class="form-control" (change)="changeSelect($event)">
-    <option value="all" *ngIf="All" selected >All</option>
-    <option [value]="cat" [selected]="cat === SelectValue" *ngFor="let cat of Allcategories">{{cat}}</option>
-  </select>
-</div>

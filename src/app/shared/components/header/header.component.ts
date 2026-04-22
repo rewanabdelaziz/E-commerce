@@ -6,7 +6,7 @@ import { UserCartService } from '../../../user/services/userCart.service';
 import { DecimalPipe } from '@angular/common';
 import { Order } from '../../../core/models/order';
 import { OrdersService } from '../../services/orders.service';
-import Swal from 'sweetalert2'; // استبدال Toastr بـ SweetAlert2
+import Swal from 'sweetalert2'; 
 
 @Component({
   selector: 'app-header',
@@ -25,7 +25,13 @@ export class HeaderComponent implements OnInit {
   islogged = this._auth.isLoggedIn
 
   cartProducts = computed(() => this._cartService.cart())
-  total: number = 0;
+  total = computed(() => {
+    let sum = 0;
+    for (const product of this.cartProducts()) {
+      sum += product.item.price * product.quantity;
+    }
+    return sum;
+  });
   currentIndex: number = 0;
   success: boolean = false;
   currentItem: IcartProduct = {} as IcartProduct;
@@ -45,15 +51,15 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getTotalPrice();
+    // this.getTotalPrice();
   }
 
-  getTotalPrice() {
-    this.total = 0
-    for (let prd in this.cartProducts()) {
-      this.total += this.cartProducts()[prd].item.price * this.cartProducts()[prd].quantity
-    }
-  }
+  // getTotalPrice() {
+  //   this.total = 0
+  //   for (let prd in this.cartProducts()) {
+  //     this.total += this.cartProducts()[prd].item.price * this.cartProducts()[prd].quantity
+  //   }
+  // }
 
   getProductbyId(id: number) {
     this.currentItem = this.cartProducts().find((prd: IcartProduct) => prd.item.id === id)!
@@ -69,9 +75,9 @@ export class HeaderComponent implements OnInit {
     if (this.cartProducts()[this.currentIndex].quantity > 1) {
       this.cartProducts()[this.currentIndex].quantity -= 1
       this.setToLocalStorage()
-      this.getTotalPrice()
+      // this.getTotalPrice()
     } else {
-      this.deleteProduct(id); // لو الكمية هتبقى صفر، امسح المنتج أحسن
+      this.deleteProduct(id); 
     }
   }
 
@@ -79,7 +85,7 @@ export class HeaderComponent implements OnInit {
     this.getProductbyId(id)
     this.cartProducts()[this.currentIndex].quantity += 1
     this.setToLocalStorage()
-    this.getTotalPrice()
+    // this.getTotalPrice()
   }
 
   clearCart() {
@@ -97,7 +103,7 @@ export class HeaderComponent implements OnInit {
       if (result.isConfirmed) {
         this._cartService.cart.set([])
         localStorage.removeItem('cart')
-        this.getTotalPrice()
+        // this.getTotalPrice()
         this.Toast.fire({ icon: 'success', title: 'Cart cleared' });
       }
     });
@@ -105,17 +111,17 @@ export class HeaderComponent implements OnInit {
 
   detectQuantityChange() {
     this.setToLocalStorage()
-    this.getTotalPrice()
+    // this.getTotalPrice()
   }
 
   deleteProduct(id: number) {
     this.getProductbyId(id)
     this._cartService.cart.update((cartProducts) => {
       cartProducts.splice(this.currentIndex, 1)
-      return [...cartProducts]; // Spread لضمان تحديث الـ Signal
+      return [...cartProducts]; 
     })
     this.setToLocalStorage()
-    this.getTotalPrice()
+    // this.getTotalPrice()
     this.Toast.fire({ icon: 'info', title: 'Product removed' });
   }
 
@@ -132,11 +138,12 @@ export class HeaderComponent implements OnInit {
         email: user.email,
         userId: user.id!,
         items: this.cartProducts(),
-        totalPrice: this.total,
+        totalPrice: this.total(),
         status: 'pending'
       }
 
-      // إظهار حالة التحميل
+
+     
       Swal.fire({
         title: 'Processing Order',
         html: 'Please wait while we place your order...',
@@ -150,6 +157,7 @@ export class HeaderComponent implements OnInit {
 
       try {
         const orderId = await this._ordersService.newOrder(orderData);
+        this._ordersService.userOrders.update((orders) => [ { id: orderId, ...orderData, createdAt: new Date() },...orders]);
         Swal.close();
         
         Swal.fire({
@@ -162,10 +170,10 @@ export class HeaderComponent implements OnInit {
           color: '#fff'
         });
 
-        // تنظيف العربة بدون سؤال تأكيد هنا لأن الطلب تم فعلاً
+       
         this._cartService.cart.set([])
         localStorage.removeItem('cart')
-        this.getTotalPrice()
+        // this.getTotalPrice()
 
       } catch (error) {
         Swal.fire({

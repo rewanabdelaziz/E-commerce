@@ -12,48 +12,65 @@
   } @else if (userOrders().length > 0) { 
     <div class="row g-3">
       @for(order of userOrders(); track order.id) {
-        <div class="col-12">
-          <div class="order-card glass-effect p-3 rounded-4 border border-secondary d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
-            
-            <div class="d-flex align-items-center gap-3">
-              <div class="order-icon bg-purple rounded-3 p-3">
-                <i class="fas fa-box-open text-white fa-lg"></i>
-              </div>
-              <div>
-                <h6 class="text-white mb-1">Order #{{order.id?.substring(0,5)}}...</h6>
-                <span class="text-muted small">
-                   <i class="far fa-calendar-alt"></i> {{ order.createdAt.seconds * 1000 | date:'mediumDate' }}
-                </span>
-              </div>
-            </div>
-
-            <div class="d-flex gap-4 px-md-4">
-              <div>
-                <p class="text-muted small mb-0">Items</p>
-                <p class="text-white fw-bold mb-0">{{order.items.length}}</p>
-              </div>
-              <div>
-                <p class="text-muted small mb-0">Total</p>
-                <p class="text-purple fw-bold mb-0">${{order.totalPrice | number:'1.2-2'}}</p>
-              </div>
-            </div>
-
-            <div class="d-flex align-items-center gap-3">
-              <span class="badge" [ngClass]="{
-                'bg-warning-subtle text-warning': order.status === 'pending',
-                'bg-success-subtle text-success': order.status === 'delivered',
-                'bg-info-subtle text-info': order.status === 'shipped'
-              }">
-                {{order.status | uppercase}}
-              </span>
-              <button class="btn btn-purple btn-sm rounded-pill px-3">Details</button>
-              @if(order.status === 'pending') {
-                 <button class="btn btn-outline-light btn-sm rounded-pill px-3" (click)="cancelOrder(order.id!)">Cancel</button>
-              }
-            </div>
-
-          </div>
+        <div >
+  <div class="order-card glass-effect p-3 rounded-4 border border-secondary">
+  <div class="row align-items-center g-3 text-center text-md-start">
+    
+    <div class="col-12 col-md-4 my-2">
+      <div class="d-flex justify-content-start justify-content-md-start gap-3 ms-0 ps-5 ps-md-0">
+        <div class="order-icon bg-purple rounded-3 p-3">
+          <i class="fas fa-box-open text-white fa-lg"></i>
         </div>
+        <div class="text-truncate">
+          <h6 class="text-white mb-1">Order #{{order.id?.substring(0,8)}}...</h6>
+          <span class="text-muted small">
+            <i class="far fa-calendar-alt"></i> {{ (order.createdAt.seconds * 1000 | date:'mediumDate') || (order.createdAt | date:'mediumDate') }} 
+          </span>
+        </div>
+      </div>
+    </div>
+
+   <div class="col-12 col-md-3">
+  <div class="d-flex flex-row justify-content-start justify-content-md-start gap-4 ms-0 ps-5 ps-md-0"> 
+    <div>
+      <p class="text-muted small mb-0">Items</p>
+      <p class="text-white fw-bold mb-0">{{order.items.length}}</p>
+    </div>
+    <div>
+      <p class="text-muted small mb-0">Total</p>
+      <p class="text-purple fw-bold mb-0">${{order.totalPrice | number:'1.2-2'}}</p>
+    </div>
+  </div>
+</div>
+
+    <div class="col-12 col-md-5  my-2">
+      <div class="d-flex justify-content-start justify-content-md-start align-items-center gap-1  ms-0 ps-5 ps-md-0 flex-wrap">
+        <span class="badge "  [ngClass]="{
+          'bg-warning-subtle text-warning': order.status === 'pending',
+          'bg-success-subtle text-success': order.status === 'delivered',
+          'bg-info-subtle text-info': order.status === 'shipped'
+        }">
+          {{order.status | uppercase}}
+        </span>
+        <div class="btn-actions d-flex gap-1">
+          <button class="btn btn-purple btn-sm rounded-pill px-3"
+                  data-bs-toggle="modal" 
+                  data-bs-target="#orderDetailsModal"
+                  (click)="openOrderDetails(order)">
+            Details
+          </button>
+          <button class="btn btn-outline-light btn-sm rounded-pill px-3" 
+                  (click)="cancelOrder(order.id!)" 
+                  [ngClass]="order.status !== 'pending' ? 'invisible' : ''">
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</div>
       }
     </div>
   } @else {
@@ -62,4 +79,90 @@
       <button class="btn btn-purple mt-3" (click)="gotohome()">Start Shopping</button>
     </div>
   }
+
+  <!-- Order Details Modal -->
+   <div class="modal fade" id="orderDetailsModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content glass-effect border-secondary rounded-4 shadow-lg">
+      
+      <div class="modal-header border-bottom border-dark-elite py-3">
+        <h5 class="modal-title text-white fw-bold">
+          <i class="fas fa-receipt text-purple me-2"></i> Order Details
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body p-4 text-white" style="max-height: 70vh; overflow-y: auto;">
+        @if(selectedOrder) {
+          <div class="d-flex justify-content-between align-items-center flex-wrap mb-4 p-3 rounded-3 bg-black bg-opacity-25">
+            <div>
+              <p class="text-muted small mb-0">Order ID</p>
+              <span class="fw-medium">#{{selectedOrder.id}}</span>
+            </div>
+            <div>
+              <p class="text-muted small mb-0">Status</p>
+              <span class="badge" [ngClass]="{
+                'bg-warning-subtle text-warning': selectedOrder.status === 'pending',
+                'bg-success-subtle text-success': selectedOrder.status === 'delivered',
+                'bg-info-subtle text-info': selectedOrder.status === 'shipped'
+              }">{{selectedOrder.status | uppercase}}</span>
+            </div>
+          </div>
+
+          <h6 class="text-purple mb-3 fw-bold">Items Summary</h6>
+          <div class="items-container">
+            @for(item of selectedOrder.items; track item.item.id) {
+              <div class="item-row mb-3 p-3 rounded-3 border border-white border-opacity-10 hover-bg-light overflow-hidden">
+                <div class="row align-items-center g-2">
+                  
+                  <div class="col-auto">
+                    <img [src]="item.item.images[0]" class="rounded-2" style="width: 50px; height: 50px; object-fit: cover;">
+                  </div>
+              
+                  <div class="col px-2 overflow-hidden">
+                    <p class="mb-0 fw-medium text-truncate text-white" [title]="item.item.title">
+                      {{item.item.title}}
+                    </p>
+                    <small class="text-muted d-block">
+                      Qty: {{item.quantity}} × ${{item.item.price | number:'1.2-2'}}
+                    </small>
+                  </div>
+              
+                  <div class="col-auto text-end">
+                    <span class="fw-bold text-purple">
+                      ${{(item.item.price * item.quantity) | number:'1.2-2'}}
+                    </span>
+                  </div>
+              
+                </div>
+              </div>
+            }
+          </div>
+
+          <div class="mt-4 pt-3 border-top border-dark-elite">
+            <div class="d-flex justify-content-between mb-2">
+              <span class="text-muted">Subtotal</span>
+              <span>${{selectedOrder.totalPrice | number:'1.2-2'}}</span>
+            </div>
+            <div class="d-flex justify-content-between mb-2">
+              <span class="text-muted">Shipping</span>
+              <span class="text-success">Free</span>
+            </div>
+            <div class="d-flex justify-content-between mt-2 pt-2 border-top">
+              <span class="h5 fw-bold">Grand Total</span>
+              <span class="h5 fw-bold text-purple">${{selectedOrder.totalPrice | number:'1.2-2'}}</span>
+            </div>
+          </div>
+        }
+      </div>
+
+      <div class="modal-footer border-top border-dark-elite">
+        <button type="button" class="btn btn-outline-light rounded-pill px-4" data-bs-dismiss="modal">Close</button>
+        <!-- <button type="button" class="btn btn-purple rounded-pill px-4" (click)="printInvoice()">
+          <i class="fas fa-print me-2"></i> Print Invoice
+        </button> -->
+      </div>
+    </div>
+  </div>
+</div>
 </div>

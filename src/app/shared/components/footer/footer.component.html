@@ -18,25 +18,24 @@
       <div class="col-lg-2 col-md-6 offset-lg-1">
         <h5 class="footer-title">Quick Links</h5>
         <ul class="footer-links">
-          <li><a routerLink="/shop">Shop</a></li>
-          <li><a href="#">About</a></li>
-          <li><a href="#">Contact</a></li>
-          <li><a href="#">FAQ</a></li>
-          <li><a href="#">Shipping Info</a></li>
-          <li><a href="#">Returns</a></li>
+          <li><a routerLink="/user/home">Home</a></li>
+          <li><a routerLink="/user/products">Shop</a></li>
+          <li><a routerLink="/user/about">About</a></li>
+          <!-- <li><a routerLink="/user/contact">Contact</a></li>
+          <li><a routerLink="/user/faq">FAQ</a></li>
+          <li><a routerLink="/user/shipping">Shipping Info</a></li>
+          <li><a routerLink="/user/returns">Returns</a></li> -->
         </ul>
       </div>
 
-      <div class="col-lg-2 col-md-6">
-        <h5 class="footer-title">Customer Service</h5>
-        <ul class="footer-links">
-          <li><a href="#">Track Order</a></li>
-          <li><a href="#">Help Center</a></li>
-          <li><a href="#">Privacy Policy</a></li>
-          <li><a href="#">Terms of Service</a></li>
-          <li><a href="#">Careers</a></li>
-        </ul>
-      </div>
+      @if(isloggedIn() && currentRole() === 'customer'){
+        <div class="col-lg-2 col-md-6">
+          <h5 class="footer-title">Customer Service</h5>
+          <ul class="footer-links">
+            <li><a routerLink="/user/orders">Track Order</a></li>
+          </ul>
+        </div>
+      }
 
       <div class="col-lg-4 col-md-6">
         <h5 class="footer-title">Newsletter</h5>

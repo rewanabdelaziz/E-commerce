@@ -26,9 +26,9 @@
         }
     </div>
 
-  <div class="table-responsive glass-effect rounded-4 overflow-hidden">
-    <table class=" table-hover admin-table mb-0 text-white w-100">
-      <thead class="bg-white bg-opacity-10 text-uppercase small">
+  <div class="table-responsive glass-effect rounded-4" >
+    <table class="table-hover admin-table mb-0 text-white w-100">
+      <thead class="bg-white bg-opacity-10 text-uppercase small sticky-top" style="z-index: 1;">
         <tr>
           <th class="ps-4">Order ID</th>
           <th>Customer Info</th>
@@ -52,12 +52,12 @@
                 <span class="text-purple fw-bold">#{{order.id!.substring(0,5)}}</span>
               </td>
               <td>
-                <div class="d-flex flex-column">
+                <div class="d-flex flex-column" style="min-width: 150px;">
                   <span class="fw-bold">User ID: {{order.userId}}</span>
                   <span class="small text-muted">{{order.items.length}} Products</span>
                 </div>
               </td>
-              <td class="small">{{ order.createdAt.seconds * 1000 | date:'medium' }}</td>
+              <td class="small" style="min-width: 120px;">{{ order.createdAt.seconds * 1000 | date:'medium' }}</td>
               <td class="fw-bold text-success">${{order.totalPrice | number:'1.2-2'}}</td>
               <td>
                 <select 

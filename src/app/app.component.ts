@@ -11,5 +11,5 @@ import { SpinnerComponent } from "./shared/components/spinner/spinner.component"
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  title = 'E-commerce';
+  title = 'EliteCommerce | Premium Shopping Experience';
 }
