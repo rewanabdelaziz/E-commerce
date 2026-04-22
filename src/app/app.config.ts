@@ -4,7 +4,6 @@ import { routes } from './app.routes';
 import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { spinnerInterceptor } from './shared/interceprors/spinner.interceptor';
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
-import { provideAuth, getAuth } from '@angular/fire/auth';
 import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 import { environment } from '../environments/environment';
 import { accessTokenInterceptor } from './shared/interceprors/access-token.interceptor';
@@ -25,7 +24,6 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withFetch(),withInterceptors([spinnerInterceptor,accessTokenInterceptor])),
     provideAnimations(), 
     provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
-    provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),
 
     {
