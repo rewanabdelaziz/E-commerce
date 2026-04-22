@@ -1,16 +1,11 @@
 .muted { color: var(--text-muted); }
-/* Glassmorphism Effect */
 .glass-effect {
   background: var(--glass-card);
   backdrop-filter: blur(15px);
   border: 1px solid var(--glass-border);
 }
-
-/* Page Header */
 .text-purple { color: #a5a1ff; }
 
-
-/* Category Card Styling */
 .category-card {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   border: 1px solid rgba(255, 255, 255, 0.05);
@@ -41,7 +36,6 @@
   inset: 0;
   background: linear-gradient(to bottom, transparent 50%, rgba(15, 23, 42, 0.8));
 }
-
 .category-icon-badge {
   background: rgba(108, 99, 255, 0.8);
   color: white;
@@ -61,20 +55,15 @@
   font-size: 0.75rem;
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
-
 .card-img-wrapper {
   height: 140px; 
   overflow: hidden;
 }
-
-
 .category-icon-badge {
   width: 30px;
   height: 30px;
   font-size: 0.9rem;
 }
-
-
 .edit-btn-sm {
   background: var(--main-purple);
   color: white;
@@ -148,8 +137,6 @@
   background: #ef4444;
   color: white;
 }
-
-/* Glass Effect Adjustment */
 .glass-effect {
   background: rgba(30, 41, 59, 0.7);
   backdrop-filter: blur(12px);
@@ -163,8 +150,6 @@
   padding: 5px 10px;
   border-radius: 6px;
 }
-
-/* Buttons & Actions */
 .btn-purple-glow {
   background: var(--main-purple);
   color: white;
@@ -179,7 +164,6 @@
   filter: brightness(1.1);
   transform: translateY(-2px);
 }
-
 .btn-action {
   width: 35px; height: 35px;
   border-radius: 8px;
@@ -190,9 +174,7 @@
 .btn-action.edit { background: var(--main-purple); color: white; }
 .btn-action.delete { background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid #ef4444; }
 .btn-action:hover { transform: scale(1.1); }
-
 /* Modal & Live Preview Custom CSS */
-
 .modal-overlay {
   position: fixed; 
   inset: 0;
@@ -203,7 +185,6 @@
   justify-content: center; 
   padding: 20px;          
 }
-
 .modal-card {
   width: 100%; 
   max-width: 950px;
@@ -213,16 +194,13 @@
   flex-direction: column;
   overflow: hidden;     
 }
-
 .modal-body-content {
   overflow-y: auto;
   flex: 1;
 }
-
 input::placeholder, textarea::placeholder {
   color: var(--text-muted);
 }
-
 .admin-input {
   background: rgba(15, 23, 42, 0.6);
   border: 1px solid var(--glass-border);
@@ -235,7 +213,6 @@ input::placeholder, textarea::placeholder {
   border-color: var(--main-purple);
   box-shadow: none; color: white;
 }
-
 .btn-close-custom {
   background: none; border: none;
   color: rgba(255,255,255,0.5); font-size: 2rem;
@@ -255,14 +232,12 @@ input::placeholder, textarea::placeholder {
   color: white; border-radius: 8px; font-size: 0.8rem;
   padding: 6px 15px;
 }
-
 /* Responsiveness */
 @media (max-width: 576px) {
-  .admin-table th:nth-child(1), .admin-table td:nth-child(1) { display: none; } /* ID */
+  .admin-table th:nth-child(1), .admin-table td:nth-child(1) { display: none; } 
   .modal-card { padding: 10px; }
   .modal-body-content { max-height: 80vh; }
 }
-
 @media (max-width: 768px) {
   .admin-page-header{
     padding-top: 40px !important;
