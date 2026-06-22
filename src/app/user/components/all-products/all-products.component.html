@@ -9,22 +9,22 @@
       <div class="filter-card">
         <div class="d-flex justify-content-between align-items-center mb-4">
           <h5 class="m-0 fw-bold">Filters</h5>
-          <button class="btn-clear" (click)="clearFilters()">Clear All</button>
+          <button class="btn-clear" type="button" (click)=" _filterProductsListFacade.clearFilters()">Clear All</button>
         </div>
 
         <div class="filter-group mb-4">
           <h6>Categories</h6>
-          @for(cat of Allcategories; track cat.id){
+          @for(cat of _filterProductsListFacade.Allcategories; track cat.id){
           <div class="form-check custom-check">
             <input class="form-check-input" 
                     type="radio" 
-                    [(ngModel)]="selectedCategoryId"
+                    [checked]="_filterProductsListFacade.selectedCategoryId() === cat.id"
                     [id]="cat.id" 
                     [value]="cat.id" 
-                    (change)=" getProductbycat(cat.id)" 
+                    (change)=" _filterProductsListFacade.getProductbycat(cat.id)" 
                     name="category">
             <label class="form-check-label d-flex justify-content-between w-100" [for]="cat.id">
-              {{cat.name}} 
+              {{cat.name}}
             </label>
           </div>
           }@empty {
@@ -34,10 +34,10 @@
 
         <div class="filter-group mb-4 price-range-container">
           <h6>Price Range</h6>
-          <ngx-slider [(value)]="minValue" 
-                      [(highValue)]="maxValue" 
-                      [options]="options"
-                      (userChangeEnd)=" filterByPrice()">
+          <ngx-slider [(value)]="_filterProductsListFacade.minValue" 
+                      [(highValue)]="_filterProductsListFacade.maxValue" 
+                      [options]="_filterProductsListFacade.options"
+                      (userChangeEnd)=" _filterProductsListFacade.filterByPrice()">
           </ngx-slider>
           <div class="values-display d-flex justify-content-between">
             <span>$0</span>
@@ -53,26 +53,26 @@
       <div class="toolbar d-flex justify-content-between align-items-center mb-4">
         <div class="d-flex align-items-center gap-3">
           <!-- <button class="btn-hide-filters"><i class="fas fa-filter me-2"></i> Hide Filters</button> -->
-          <span class="text-secondary small">{{ Products().length }} products</span>
+          <span class="text-secondary small">{{ _filterProductsListFacade.Products().length }} products</span>
         </div>
 
       </div>
 
       <div class="row g-4">
-        @for(prd of Products() ; track prd.id){
+        @for(prd of _filterProductsListFacade.Products() ; track prd.id){
         <div class="col-md-4">
           <div class="product-card" (click)="showDetails(prd.id)">
             <div class="img-container">
               <!-- <span class="badge-discount">-25%</span>
               <span class="badge-new">New</span> -->
-              <img [src]="prd.images[0]" [alt]="prd.title" [appImageFallback]="prd?.title ?? 'Elite Commerce'">
+              <img [src]="prd.images[0]" [alt]="prd.title" [appImageFallback]="prd?.title ?? 'Elite Commerce'" [title]="prd.title">
             </div>
             <div class="card-info p-3">
               <span class="cat-tag">{{prd.category.name}}</span>
               <h6 class="mt-2 text-white">{{prd.title}}</h6>
               <div class="d-flex justify-content-between align-items-center mt-3">
-                 <span class="price">${{prd.price | number:'1.2-2'}}</span>
-                 <button class="btn-add-cart" (click)="addToCart(prd, $event)"><i class="fas fa-plus"></i></button>
+                <span class="price">${{prd.price | number:'1.2-2'}}</span>
+                <button type="button" class="btn-add-cart" (click)="addToCart(prd, $event)"><i class="fas fa-plus"></i></button>
               </div>
             </div>
           </div>
@@ -81,13 +81,11 @@
           <p class="text-secondary">No products available.</p>
         }
 
-        @if(isMoreData()){
-         <div class="text-center"><button class="btn btn-primary" (click)="loadMore()">Load More</button></div>
-        }@else if(!isMoreData() && Products().length > 0){
-           
+        @if(_productListPaginationService.isMoreData()){
+          <div class="text-center"><button type="button" class="btn btn-primary" (click)=" _filterProductsListFacade.loadMore()">Load More</button></div>
+        }@else if(! _productListPaginationService.isMoreData() && _filterProductsListFacade.Products().length > 0){
           <div class="text-center"><span class="text-secondary">No more products to load.</span></div>
         }
-        
       </div>
     </main>
   </div>
